@@ -1,5 +1,5 @@
 
-import { LayoutDashboard, Calendar, List, CreditCard, Settings } from "lucide-react";
+import { LayoutDashboard, Megaphone , Wallet , List, CreditCard, Focus  } from "lucide-react";
 
 export const SidebarOptions = [
     {
@@ -8,14 +8,14 @@ export const SidebarOptions = [
         path : "/dashboard"
     },
     {
-        name: "scheduled Interviews",
-        icon:Calendar,
-        path : "/scheduled-interviews"
+        name: "Our Advise",
+        icon: Megaphone,
+        path : "/our-advise"
     },
     {
-        name: "All Interviews",
+        name: "Previous Interviews",
         icon:List,
-        path : "/all-interviews"
+        path : "/previous-interviews"
     },
     {
         name: "Billing",
@@ -23,11 +23,15 @@ export const SidebarOptions = [
         path : "/billing"
     },
     {
-        name: "Settings",
-        icon:Settings,
-        path : "/settings"
-    }
-
+        name: "Donate",
+        icon: Wallet,
+        path : "/donate-us"
+    },
+    {
+        name:"About me",
+        icon:Focus,
+        path:"/about-me"
+    },
 ]
 
 export const QUESTIONS_PROMPT = `

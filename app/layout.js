@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "AI VISA Interview Prep",
+  title: "PrepForVISA",
   description: "Prepare for your AI visa interview with confidence",
 };
 

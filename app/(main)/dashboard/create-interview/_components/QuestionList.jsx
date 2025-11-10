@@ -12,6 +12,7 @@ const QuestionList = ({ formData }) => {
   const [loading, setLoading] = useState(false);
   const [questionList, setQuestionList] = useState([]);
   const { user } = useUser();
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
     if (formData?.country && formData?.description && formData?.duration) {
@@ -42,6 +43,7 @@ const QuestionList = ({ formData }) => {
   };
 
   const onFinish = async () => {
+    setSaving(true);
     const interview_id = uuidv4();
 
     
@@ -58,6 +60,7 @@ const QuestionList = ({ formData }) => {
         },
       ])
       .select();
+      setSaving(false);
 
     if (error) {
       console.error(" Supabase insert error:", error);
@@ -88,7 +91,10 @@ const QuestionList = ({ formData }) => {
               <QuestionListContainer questionList={questionList} />
 
               <div className="mt-6 flex justify-end">
-                <Button onClick={onFinish}>Finish</Button>
+                <Button onClick={onFinish} disabled={saving}>
+                  {saving && <Loader2Icon className="animate-spin"/>}
+                  Finish</Button>
+
               </div>
             </>
           ) : (
