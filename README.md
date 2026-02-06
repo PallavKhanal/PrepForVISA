@@ -1,36 +1,73 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+PrepForVISA
+PrepForVISA is a comprehensive resource repository designed to assist students and professionals in preparing for visa interviews, specifically focusing on F-1 student visas and other academic-related immigration processes. This repository centralizes common interview questions, documentation checklists, and strategic advice to streamline the application journey.
 
-## Getting Started
+Table of Contents
+Overview
 
-First, run the development server:
+Key Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+Project Structure
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Getting Started
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Usage
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Contributing
 
-## Learn More
+License
 
-To learn more about Next.js, take a look at the following resources:
+Overview
+The visa application process can be rigorous and high-stakes. This project serves as an open-source guide to help applicants organize their thoughts, prepare for technical and personal questions, and ensure they meet the requirements of the consular officers.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Key Features
+Curated Question Bank: A collection of frequently asked questions regarding study plans, financial stability, and post-graduation goals.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Documentation Guide: Checklists for essential documents including I-20s, DS-160 confirmations, and financial proof.
 
-## Deploy on Vercel
+Mock Interview Framework: Structured templates for practicing responses to build confidence and clarity.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Strategic Tips: Guidance on body language, professional etiquette, and how to handle complex inquiries.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Project Structure
+The repository is organized into categorical directories for easy navigation:
+
+/Questions: Thematic breakdowns of interview questions (Financial, Academic, Personal).
+
+/Resources: Links to official government portals and secondary reading materials.
+
+/Templates: Customizable documents for personalizing your preparation.
+
+Getting Started
+To use the resources in this repository:
+
+Clone the repository to your local machine:
+
+Bash
+git clone https://github.com/PallavKhanal/PrepForVISA.git
+Navigate through the folders to find the specific area of preparation you wish to focus on.
+
+Review the Markdown files for detailed insights and preparation tips.
+
+Usage
+Applicants are encouraged to fork this repository and use the provided templates to draft their own responses. By maintaining a local copy, you can track your progress and refine your answers as you conduct mock interviews.
+
+Contributing
+Contributions are welcome to help keep the information current and comprehensive. If you have recently gone through the visa process and have new questions or insights to share:
+
+Fork the project.
+
+Create your Feature Branch (git checkout -b feature/NewInsights).
+
+Commit your changes (git commit -m 'Add new interview questions').
+
+Push to the branch (git push origin feature/NewInsights).
+
+Open a Pull Request.
+
+License
+Distributed under the MIT License. See LICENSE for more information.
+
+Contact
+Pallav Khanal - GitHub Profile
+
+Project Link: https://github.com/PallavKhanal/PrepForVISA
