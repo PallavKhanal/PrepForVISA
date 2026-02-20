@@ -104,7 +104,7 @@ export default function Home() {
             </h2>
             <p className="text-gray-500 mt-4 max-w-md mx-auto text-sm leading-relaxed">
               From personalized question banks to live voice practice sessions — built
-              specifically for student and professional visa interviews.
+              specifically for F1 student visa applicants preparing for the U.S. consular interview.
             </p>
           </div>
 
@@ -112,7 +112,7 @@ export default function Home() {
             <FeatureCard
               icon={<Brain size={18} />}
               title="AI Question Generation"
-              desc="Get a custom set of 10–15 interview questions tailored to your destination country, study plan, and financial background."
+              desc="Get a custom set of 10–15 interview questions tailored specifically to your F1 study plan, financial situation, and intended U.S. university."
             />
             <FeatureCard
               icon={<Mic size={18} />}
@@ -185,7 +185,7 @@ export default function Home() {
             <Step
               number="01"
               title="Create your profile"
-              desc="Sign in with Google and tell us your visa type, destination country, and purpose of travel."
+              desc="Sign in with Google and tell us about your intended major, university, and how you plan to fund your F1 studies."
             />
             <Step
               number="02"
@@ -212,8 +212,8 @@ export default function Home() {
               Built for applicants who take their interview seriously.
             </h2>
             <p className="text-gray-500 mt-5 text-sm leading-relaxed">
-              PrepForVISA is designed for student and academic visa applicants who want more
-              than a generic question list — they want to practice the way the real interview
+              PrepForVISA is designed for F1 visa applicants who want more than a generic
+              question list — they want to practice the way the real U.S. consular interview
               actually works.
             </p>
             <Link href="/auth" className="inline-block mt-8">
@@ -224,7 +224,7 @@ export default function Home() {
           </div>
           <ul className="space-y-4 pt-1">
             {[
-              "You have an F-1, J-1, or student visa interview coming up.",
+              "You have an F-1 student visa interview coming up.",
               "You have never been interviewed by a consular officer before.",
               "You are not confident about how to present your financial situation.",
               "You want to practice speaking your answers out loud, not just reading them.",
@@ -252,8 +252,8 @@ export default function Home() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-x-12 gap-y-10 max-w-4xl mx-auto">
             <FaqItem
-              q="What visa types does PrepForVISA support?"
-              a="The platform is focused primarily on F-1 student visas, with support for J-1 exchange and other academic visa types. Questions are generated based on your specific destination country and program."
+              q="Which visa does PrepForVISA focus on?"
+              a="PrepForVISA is focused exclusively on the F-1 student visa for the United States. Every question set and mock session is tailored specifically to the U.S. consular F1 interview."
             />
             <FaqItem
               q="Do I need any special setup for the voice mock interview?"
@@ -261,7 +261,7 @@ export default function Home() {
             />
             <FaqItem
               q="How does question generation work?"
-              a="You provide your destination country, a brief description of your study or travel purpose, and the intended duration. The AI uses this to generate 10–15 questions specific to your profile."
+              a="You provide a brief description of your intended major, U.S. university, and how you plan to fund your studies. The AI uses this to generate 10–15 F1-specific questions tailored to your profile."
             />
             <FaqItem
               q="How long is the mock interview session?"
@@ -327,16 +327,14 @@ function ChallengePoint({ label, desc }) {
 function FeatureCard({ icon, title, desc, featured = false }) {
   return (
     <div
-      className={`rounded-xl p-8 border transition-all duration-200 ${
-        featured
-          ? "bg-[#0a0a0a] text-white border-[#0a0a0a]"
-          : "bg-white border-gray-100 hover:border-gray-300"
-      }`}
+      className={`rounded-xl p-8 border transition-all duration-200 ${featured
+        ? "bg-[#0a0a0a] text-white border-[#0a0a0a]"
+        : "bg-white border-gray-100 hover:border-gray-300"
+        }`}
     >
       <div
-        className={`w-10 h-10 rounded-lg flex items-center justify-center mb-6 ${
-          featured ? "bg-white/10 text-white" : "bg-gray-50 text-gray-700"
-        }`}
+        className={`w-10 h-10 rounded-lg flex items-center justify-center mb-6 ${featured ? "bg-white/10 text-white" : "bg-gray-50 text-gray-700"
+          }`}
       >
         {icon}
       </div>

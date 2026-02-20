@@ -1,31 +1,33 @@
-"use client"
-import React from 'react'
+"use client";
+import React from 'react';
 import { useUser } from '@/app/Provider';
-import Image from 'next/image';
 
+const WelcomeContainer = () => {
+  const { user } = useUser();
 
-
-
-const WecomeContainer = () => {
-    const {user} = useUser();
   return (
-    <div className="w-full flex justify-between items-center mb-8">
-        <div className="w-1/2">
-        <h2 className="text-2xl font-bold"> Welcome Back!! {user?.name} </h2>
-        <h2 className="text-lg">Ready to start your next interview?</h2>
+    <div className="pt-2 pb-10 mb-10 border-b border-gray-100">
+      <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-4">
+        Dashboard
+      </p>
+      <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight text-[#0a0a0a] leading-snug">
+            Welcome back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}.
+          </h1>
+          <p className="text-sm text-gray-500 mt-3 leading-relaxed max-w-md">
+            Continue your preparation. You have <span className="font-semibold text-[#0a0a0a]">2 sessions</span> ready to review.
+          </p>
         </div>
-        {user?.picture && (
-        <Image
-          src={user.picture}
-          alt="user image"
-          width={50}
-          height={50}
-          className="rounded-full mt-2 border border-gray-300 shadow-sm"
-        />
-      )}
+        <div className="shrink-0">
+          <div className="inline-flex items-center gap-2 border border-gray-200 rounded-full px-4 py-1.5 text-xs text-gray-500 select-none">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+            Preparation active
+          </div>
+        </div>
+      </div>
     </div>
+  );
+};
 
-  )
-}
-
-export default WecomeContainer
+export default WelcomeContainer;
