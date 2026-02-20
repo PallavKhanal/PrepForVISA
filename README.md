@@ -1,73 +1,167 @@
-PrepForVISA
-PrepForVISA is a comprehensive resource repository designed to assist students and professionals in preparing for visa interviews, specifically focusing on F-1 student visas and other academic-related immigration processes. This repository centralizes common interview questions, documentation checklists, and strategic advice to streamline the application journey.
+# PrepForVISA
 
-Table of Contents
-Overview
+A web application that helps students and professionals prepare for visa interviews using AI-generated practice questions and a live voice mock interview experience.
 
-Key Features
+---
 
-Project Structure
+## Table of Contents
 
-Getting Started
+- [About](#about)
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Environment Variables](#environment-variables)
+  - [Running the App](#running-the-app)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
-Usage
+---
 
-Contributing
+## About
 
-License
+PrepForVISA is a full-stack Next.js application designed to reduce the stress and uncertainty of visa interviews. Users sign in with Google, generate a personalized set of interview questions powered by an LLM, and then practice in a live voice mock interview session — all in one place.
 
-Overview
-The visa application process can be rigorous and high-stakes. This project serves as an open-source guide to help applicants organize their thoughts, prepare for technical and personal questions, and ensure they meet the requirements of the consular officers.
+---
 
-Key Features
-Curated Question Bank: A collection of frequently asked questions regarding study plans, financial stability, and post-graduation goals.
+## Features
 
-Documentation Guide: Checklists for essential documents including I-20s, DS-160 confirmations, and financial proof.
+- **Google OAuth Authentication** — Secure sign-in via Supabase Auth.
+- **AI Question Generation** — Submits country, study/travel description, and duration to generate 10–15 tailored visa interview questions via OpenRouter (Mistral 8x7b).
+- **Live Voice Mock Interview** — Real-time voice conversation powered by Vapi AI, auto-ending after 3 minutes with a post-interview summary.
+- **Dashboard** — Central hub to access all features.
+- **Expert Advice Page** — Curated tips on body language, documentation, and interview etiquette.
 
-Mock Interview Framework: Structured templates for practicing responses to build confidence and clarity.
+---
 
-Strategic Tips: Guidance on body language, professional etiquette, and how to handle complex inquiries.
+## Tech Stack
 
-Project Structure
-The repository is organized into categorical directories for easy navigation:
+| Layer | Technology |
+|---|---|
+| Framework | Next.js 15 (App Router) |
+| Language | JavaScript (React 18) |
+| Auth & Database | Supabase (Google OAuth + PostgreSQL) |
+| AI / LLM | OpenRouter — Mistral 8x7b (via `openai` SDK) |
+| Voice AI | Vapi AI (`@vapi-ai/web`) |
+| UI | shadcn/ui (new-york) + Tailwind CSS v4 + Radix UI |
+| Icons | Lucide React |
 
-/Questions: Thematic breakdowns of interview questions (Financial, Academic, Personal).
+---
 
-/Resources: Links to official government portals and secondary reading materials.
+## Project Structure
 
-/Templates: Customizable documents for personalizing your preparation.
+```
+prep-for-visa-interview/
+├── app/
+│   ├── layout.js                   # Root layout (fonts, metadata)
+│   ├── page.js                     # Public landing page
+│   ├── Provider.jsx                # Root provider: user auth + context
+│   ├── globals.css
+│   ├── api/
+│   │   └── ai-model/route.jsx      # POST: generates visa questions via OpenRouter
+│   ├── auth/
+│   │   └── page.jsx                # Google OAuth login
+│   └── (main)/                     # Protected route group (shared sidebar layout)
+│       ├── layout.jsx
+│       ├── Provider.jsx            # Dashboard context provider
+│       ├── dashboard/
+│       │   ├── page.jsx            # Main dashboard
+│       │   ├── create-interview/   # AI question generation flow
+│       │   └── create-mock/        # Vapi voice mock interview
+│       ├── our-advise/page.jsx     # Expert tips
+│       ├── about-me/page.jsx
+│       └── donate-us/page.jsx
+├── components/
+│   └── ui/                         # shadcn/ui primitives
+├── services/
+│   ├── supabaseClient.js           # Supabase client singleton
+│   └── Constants.jsx               # Nav options + AI prompt template
+├── hooks/
+│   └── use-mobile.js               # Mobile breakpoint hook
+├── lib/
+│   └── utils.js                    # cn() helper (clsx + tailwind-merge)
+├── UserDetailContext.jsx            # React Context for user state
+└── supabase/                        # Supabase config / migrations
+```
 
-Getting Started
-To use the resources in this repository:
+---
 
-Clone the repository to your local machine:
+## Getting Started
 
-Bash
+### Prerequisites
+
+- Node.js 18+
+- npm
+- A [Supabase](https://supabase.com) project with Google OAuth enabled
+- An [OpenRouter](https://openrouter.ai) API key
+- A [Vapi AI](https://vapi.ai) account with a configured agent
+
+### Installation
+
+```bash
 git clone https://github.com/PallavKhanal/PrepForVISA.git
-Navigate through the folders to find the specific area of preparation you wish to focus on.
+cd prep-for-visa-interview
+npm install
+```
 
-Review the Markdown files for detailed insights and preparation tips.
+### Environment Variables
 
-Usage
-Applicants are encouraged to fork this repository and use the provided templates to draft their own responses. By maintaining a local copy, you can track your progress and refine your answers as you conduct mock interviews.
+Create a `.env.local` file in the project root:
 
-Contributing
-Contributions are welcome to help keep the information current and comprehensive. If you have recently gone through the visa process and have new questions or insights to share:
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+OPENROUTER_API_KEY=your_openrouter_api_key
+NEXT_PUBLIC_VAPI_PUBLIC_KEY=your_vapi_public_key
+NEXT_PUBLIC_VAPI_AGENT_ID=your_vapi_agent_id
+```
 
-Fork the project.
+> `OPENROUTER_API_KEY` is server-only and never exposed to the browser. All `NEXT_PUBLIC_` variables are accessible client-side.
 
-Create your Feature Branch (git checkout -b feature/NewInsights).
+### Running the App
 
-Commit your changes (git commit -m 'Add new interview questions').
+```bash
+npm run dev       # Start development server → http://localhost:3000
+npm run build     # Build for production
+npm run start     # Start production server
+npm run lint      # Run ESLint
+```
 
-Push to the branch (git push origin feature/NewInsights).
+---
 
-Open a Pull Request.
+## Usage
 
-License
-Distributed under the MIT License. See LICENSE for more information.
+1. Visit the app and sign in with your Google account.
+2. From the dashboard, go to **Create Interview** — enter your destination country, a brief description of your purpose, and intended duration.
+3. The app generates a personalized set of visa interview questions.
+4. Go to **Create Mock** to start a live voice mock interview session. The session auto-ends after 3 minutes.
+5. Review the post-interview summary and refine your answers.
 
-Contact
-Pallav Khanal - GitHub Profile
+---
 
-Project Link: https://github.com/PallavKhanal/PrepForVISA
+## Contributing
+
+Contributions are welcome. To contribute:
+
+1. Fork the repository.
+2. Create a feature branch: `git checkout -b feature/your-feature`
+3. Commit your changes: `git commit -m 'Add your feature'`
+4. Push to the branch: `git push origin feature/your-feature`
+5. Open a Pull Request.
+
+---
+
+## License
+
+Distributed under the MIT License. See [LICENSE](LICENSE) for details.
+
+---
+
+## Contact
+
+**Pallav Khanal** — [GitHub](https://github.com/PallavKhanal)
+
+Project Link: [https://github.com/PallavKhanal/PrepForVISA](https://github.com/PallavKhanal/PrepForVISA)
