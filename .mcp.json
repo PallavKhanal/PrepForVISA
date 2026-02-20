@@ -2,7 +2,22 @@
   "mcpServers": {
     "supabase": {
       "type": "http",
-      "url": "https://mcp.supabase.com/mcp"
+      "url": "https://mcp.supabase.com/mcp",
+      "headers": {
+        "Authorization": "Bearer sbp_db21cdfafcbf1515066bb0e2836836b8e653e669"
+      }
+    },
+    "vapi-mcp": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "https://mcp.vapi.ai/mcp",
+        "--header",
+        "Authorization: Bearer ${VAPI_TOKEN}"
+      ],
+      "env": {
+        "VAPI_TOKEN": "61399b5f-9563-4880-8fc7-40fd79811dcf"
+      }
     }
   }
 }
