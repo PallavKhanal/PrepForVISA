@@ -12,13 +12,6 @@ const PostInterviewComponent = () => {
 
       <div className="flex space-x-4">
         <Button
-          className="border border-black bg-white text-black hover:bg-black hover:text-white"
-          onClick={() => router.refresh()} // restart interview
-        >
-          Take Interview Again
-        </Button>
-
-        <Button
           className="bg-black text-white hover:bg-gray-800"
           onClick={() => router.push("/dashboard")}
         >
