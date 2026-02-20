@@ -1,7 +1,7 @@
 import React from 'react'
-import WecomeContainer from '../dashboard/_components/WecomeContainer';
-import CreateOptions from '../dashboard/_components/CreateOptions';
-import LatestInterviewList from './_components/LatestInterviewList';
+import WecomeContainer from '@/components/features/dashboard/WecomeContainer';
+import CreateOptions from '@/components/features/dashboard/CreateOptions';
+import LatestInterviewList from '@/components/features/dashboard/LatestInterviewList';
 
 const Dashboard = () => {
 

@@ -2,8 +2,8 @@
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { ArrowLeft } from 'lucide-react'
-import FormContainer from './_components/FormContainer'
-import QuestionList from './_components/QuestionList'
+import FormContainer from '@/components/features/create-interview/FormContainer'
+import QuestionList from '@/components/features/create-interview/QuestionList'
 
 const CreateInterview = () => {
   const [formData, setFormData] = useState({})

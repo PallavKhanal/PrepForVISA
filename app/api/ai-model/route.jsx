@@ -1,4 +1,4 @@
-import { QUESTIONS_PROMPT } from "@/services/Constants";
+import { QUESTIONS_PROMPT } from "@/lib/constants";
 import  OpenAI  from "openai";
 import { NextResponse } from "next/server";
 

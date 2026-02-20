@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
-import Interview from "./Interview"; // 
+import Interview from "./Interview"; //
 
 const InterviewIntro = () => {
   const [start, setStart] = useState(false);

@@ -4,7 +4,7 @@ import axios from "axios";
 import { Loader2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import QuestionListContainer from "./QuestionListContainer";
-import supabase from "@/services/supabaseClient";
+import supabase from "@/lib/supabase";
 import { useUser } from "@/app/Provider";
 import { v4 as uuidv4 } from "uuid";
 
@@ -46,7 +46,7 @@ const QuestionList = ({ formData }) => {
     setSaving(true);
     const interview_id = uuidv4();
 
-    
+
     const { data, error } = await supabase
       .from("Interviews")
       .insert([
@@ -54,8 +54,8 @@ const QuestionList = ({ formData }) => {
           country: formData.country,
           description: formData.description,
           duration: formData.duration,
-          questions: questionList,  
-          user_email: user?.email,  
+          questions: questionList,
+          user_email: user?.email,
           interview_id: interview_id,
         },
       ])

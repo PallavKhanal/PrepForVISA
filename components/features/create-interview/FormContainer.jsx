@@ -26,7 +26,7 @@ const FormContainer = ({ handleInputChange, GoToNext }) => {
 
       <div>
         <h2 className="font-bold my-2">
-          Give us a short description of your intended major, cost of attendance, and university, as well as how you’re going to sponsor your studies
+          Give us a short description of your intended major, cost of attendance, and university, as well as how you're going to sponsor your studies
         </h2>
         <textarea
           className="w-full border px-3 py-2 rounded-md h-[150px]"
@@ -50,7 +50,7 @@ const FormContainer = ({ handleInputChange, GoToNext }) => {
       <div className="mt-4 flex justify-end">
         <button
           className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors cursor-pointer"
-          onClick={GoToNext} 
+          onClick={GoToNext}
         >
           Generate Questions
         </button>

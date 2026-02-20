@@ -3,7 +3,7 @@ import React from 'react'
 import { useUser } from '@/app/Provider';
 import Image from 'next/image';
 
-     
+
 
 
 const WecomeContainer = () => {
@@ -24,7 +24,7 @@ const WecomeContainer = () => {
         />
       )}
     </div>
-    
+
   )
 }
 

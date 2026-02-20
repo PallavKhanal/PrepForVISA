@@ -10,11 +10,11 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import React, { use } from "react"
+import React from "react"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Plus } from "lucide-react"
-import { SidebarOptions } from "@/services/Constants"
+import { SidebarOptions } from "@/lib/constants"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 
@@ -22,7 +22,7 @@ import { usePathname } from "next/navigation"
 function AppSidebar() {
 
   const path = usePathname();
-  
+
   return (
     <Sidebar>
       <SidebarHeader className="flex flex-col items-center gap-3 p-4">

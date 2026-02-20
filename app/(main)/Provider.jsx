@@ -1,7 +1,7 @@
 "use client"
 import React from "react"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
-import AppSidebar from "./_components/AppSideBar"
+import AppSidebar from "@/components/layout/AppSideBar"
 
 const DashboardProvider = ({ children }) => {
   return (

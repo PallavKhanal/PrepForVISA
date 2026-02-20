@@ -1,6 +1,6 @@
 import React from 'react'
-import Interview from './_components/interview'
-import InterviewIntro from './_components/InterviewIntro'
+import Interview from '@/components/features/create-mock/Interview'
+import InterviewIntro from '@/components/features/create-mock/InterviewIntro'
 
 const CreateMock = () => {
   return (

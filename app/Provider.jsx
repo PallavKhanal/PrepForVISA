@@ -1,8 +1,8 @@
 "use client"
-import supabase from '@/services/supabaseClient'
+import supabase from '@/lib/supabase'
 import { User } from 'lucide-react';
 import React, { useEffect, useContext, useState}  from 'react'
-import { UserDetailContext } from '../UserDetailContext';
+import { UserDetailContext } from '@/lib/UserDetailContext';
 
 
 const Provider = ({children}) => {
