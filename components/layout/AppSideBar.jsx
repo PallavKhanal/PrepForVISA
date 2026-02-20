@@ -23,7 +23,7 @@ function AppSidebar() {
     <Sidebar className="border-r border-gray-100 bg-white">
       <SidebarHeader className="flex flex-col gap-8 p-8 pb-4">
         <div className="w-full">
-          <Link href="/" className="inline-block text-xl font-bold tracking-tight select-none text-[#0a0a0a] hover:opacity-80 transition-opacity">
+          <Link href="/dashboard" className="inline-block text-xl font-bold tracking-tight select-none text-[#0a0a0a] hover:opacity-80 transition-opacity">
             PrepForVISA
           </Link>
         </div>
@@ -47,8 +47,8 @@ function AppSidebar() {
                     <SidebarMenuButton
                       asChild
                       className={`w-full rounded-lg transition-all duration-150 py-6 ${isActive
-                          ? 'bg-[#fafafa] text-[#0a0a0a] font-semibold border border-gray-200'
-                          : 'text-gray-500 hover:text-black hover:bg-gray-50 border border-transparent'
+                        ? 'bg-[#fafafa] text-[#0a0a0a] font-semibold border border-gray-200'
+                        : 'text-gray-500 hover:text-black hover:bg-gray-50 border border-transparent'
                         }`}
                     >
                       <Link href={option.path} className="flex items-center px-4 py-3">

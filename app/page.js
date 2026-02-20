@@ -1,9 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
 import { ArrowRight, Brain, Check, ChevronRight, FileText, Mic, Shield, Target, TrendingUp, Users } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import supabase from "@/lib/supabase";
 
 export default function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    supabase.auth.getUser().then(({ data: { user } }) => {
+      if (user) router.replace("/dashboard");
+    });
+  }, []);
+
   return (
     <div className="min-h-screen bg-white text-[#0a0a0a]">
 
