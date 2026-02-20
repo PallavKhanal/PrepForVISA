@@ -6,24 +6,14 @@ import { Mic, MicOff, Video, VideoOff, PhoneOff } from "lucide-react";
 import Image from "next/image";
 import Vapi from "@vapi-ai/web";
 
-// Keywords that signal the interviewer has delivered a final visa decision
 const DECISION_KEYWORDS = [
-  "visa is approved",
-  "visa is accepted",
-  "visa has been approved",
-  "visa has been accepted",
-  "visa is rejected",
-  "visa is denied",
-  "visa has been rejected",
-  "visa has been denied",
-  "application is approved",
-  "application is rejected",
-  "cannot grant you",
-  "i am unable to approve",
+  "visa is approved", "visa is accepted", "visa has been approved", "visa has been accepted",
+  "visa is rejected", "visa is denied", "visa has been rejected", "visa has been denied",
+  "application is approved", "application is rejected", "cannot grant you", "i am unable to approve",
 ];
 
-// Format seconds → MM:SS
-const formatTime = (s) => `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
+const formatTime = (s) =>
+  `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
 const Interview = () => {
   const [micOn, setMicOn] = useState(true);
@@ -37,32 +27,26 @@ const Interview = () => {
   const videoRef = useRef(null);
   const streamRef = useRef(null);
   const timerRef = useRef(null);
-  const elapsedIntervalRef = useRef(null);
+  const elapsedRef = useRef(null);
   const endingRef = useRef(false);
   const mountedRef = useRef(false);
 
-  // ─── End call ────────────────────────────────────────────────────────────────
   const handleEndCall = () => {
     if (endingRef.current) return;
     endingRef.current = true;
-
     try { if (vapiRef.current) { vapiRef.current.stop(); vapiRef.current = null; } } catch (_) { }
     try { if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; } } catch (_) { }
-
-    if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
-    if (elapsedIntervalRef.current) { clearInterval(elapsedIntervalRef.current); elapsedIntervalRef.current = null; }
-
+    if (timerRef.current) clearTimeout(timerRef.current);
+    if (elapsedRef.current) clearInterval(elapsedRef.current);
     setCallActive(false);
     setAiSpeaking(false);
     setShowPostInterview(true);
   };
 
-  // ─── Setup ───────────────────────────────────────────────────────────────────
   useEffect(() => {
     endingRef.current = false;
     mountedRef.current = true;
 
-    // Camera
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
       .then((stream) => {
         streamRef.current = stream;
@@ -70,17 +54,13 @@ const Interview = () => {
       })
       .catch((err) => console.warn("Camera/Mic denied:", err));
 
-    // Vapi
     const v = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY);
     vapiRef.current = v;
 
     v.on("error", (err) => console.warn("Vapi non-fatal:", err));
-
     v.on("call-end", () => handleEndCall());
-
     v.on("speech-start", () => setAiSpeaking(true));
     v.on("speech-end", () => setAiSpeaking(false));
-
     v.on("message", (msg) => {
       if (msg?.role === "assistant" && msg?.content) {
         const text = msg.content.toLowerCase();
@@ -93,14 +73,11 @@ const Interview = () => {
     v.start(process.env.NEXT_PUBLIC_VAPI_AGENT_ID)
       .then(() => {
         setCallActive(true);
-        // Elapsed interview timer
-        elapsedIntervalRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
-        // 10-minute safety cap
+        elapsedRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
         timerRef.current = setTimeout(() => handleEndCall(), 600_000);
       })
       .catch((err) => console.error("Call start failed:", err));
 
-    // Tab switching → end interview
     const onVisibility = () => { if (document.hidden && mountedRef.current) handleEndCall(); };
     document.addEventListener("visibilitychange", onVisibility);
 
@@ -110,7 +87,7 @@ const Interview = () => {
       try { if (vapiRef.current) { vapiRef.current.stop(); vapiRef.current = null; } } catch (_) { }
       try { if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; } } catch (_) { }
       if (timerRef.current) clearTimeout(timerRef.current);
-      if (elapsedIntervalRef.current) clearInterval(elapsedIntervalRef.current);
+      if (elapsedRef.current) clearInterval(elapsedRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -134,193 +111,156 @@ const Interview = () => {
   if (showPostInterview) return <PostInterviewComponent />;
 
   return (
-    <div className="relative flex flex-col h-screen w-full bg-[#0a0a0f] overflow-hidden">
+    <div className="flex flex-col h-screen bg-white overflow-hidden">
 
-      {/* ── Ambient gradient blobs ─────────────────────────────────────── */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full bg-blue-900/20 blur-[120px]" />
-        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full bg-indigo-900/20 blur-[120px]" />
-      </div>
-
-      {/* ── Top bar ───────────────────────────────────────────────────── */}
-      <div className="relative z-10 flex items-center justify-between px-8 pt-6 pb-2">
-        {/* Status badge */}
+      {/* ── Top bar ── */}
+      <div className="shrink-0 flex items-center justify-between px-8 py-4 border-b border-gray-100">
         <div className="flex items-center gap-2.5">
-          <span className={`relative flex h-2.5 w-2.5`}>
-            {callActive && (
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-            )}
-            <span className={`relative inline-flex rounded-full h-2.5 w-2.5 ${callActive ? "bg-emerald-400" : "bg-yellow-400"}`} />
+          <span className="relative flex h-2 w-2">
+            {callActive && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />}
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${callActive ? "bg-emerald-500" : "bg-gray-300"}`} />
           </span>
-          <span className="text-xs font-semibold tracking-widest uppercase text-white/50">
+          <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
             {callActive ? "Live Interview" : "Connecting…"}
           </span>
         </div>
 
-        {/* Timer */}
-        <div className="flex items-center gap-3">
-          <div className="font-mono text-sm text-white/40 tabular-nums">
-            {formatTime(elapsed)}
-          </div>
-          <div className="h-4 w-px bg-white/10" />
-          <div className="text-xs text-white/30 font-medium">F-1 Visa Interview</div>
+        <div className="flex items-center gap-4">
+          <span className="font-mono text-sm text-gray-400 tabular-nums">{formatTime(elapsed)}</span>
+          <div className="h-3.5 w-px bg-gray-200" />
+          <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">F-1 Visa · Mock Interview</span>
         </div>
       </div>
 
-      {/* ── Main stage ────────────────────────────────────────────────── */}
-      <div className="relative z-10 flex flex-1 gap-4 px-8 pb-4 min-h-0">
+      {/* ── Main area ── */}
+      <div className="flex flex-1 gap-6 p-6 min-h-0">
 
-        {/* Self video (large, left) */}
-        <div className="relative flex-1 rounded-2xl overflow-hidden bg-[#111118] border border-white/5 shadow-2xl">
+        {/* Self video */}
+        <div className="relative flex-1 rounded-xl overflow-hidden bg-[#fafafa] border border-gray-100">
           <video
             ref={videoRef}
             autoPlay muted playsInline
-            className={`w-full h-full object-cover transition-all duration-300 ${!videoOn ? "opacity-0" : "opacity-100"}`}
+            className={`w-full h-full object-cover transition-opacity duration-300 ${videoOn ? "opacity-100" : "opacity-0"}`}
           />
-
-          {/* Camera-off placeholder */}
           {!videoOn && (
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className="w-20 h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-3">
-                <VideoOff className="w-8 h-8 text-white/30" />
+              <div className="w-14 h-14 rounded-full bg-white border border-gray-200 flex items-center justify-center mb-2 shadow-sm">
+                <VideoOff className="w-6 h-6 text-gray-400" />
               </div>
-              <p className="text-white/30 text-sm font-medium">Camera is off</p>
+              <p className="text-sm text-gray-400 font-medium">Camera off</p>
             </div>
           )}
-
           {/* Self label */}
-          <div className="absolute bottom-4 left-4 flex items-center gap-2">
-            <div className="bg-black/60 backdrop-blur-md border border-white/10 rounded-lg px-3 py-1.5 flex items-center gap-2">
-              {!micOn && <MicOff className="w-3 h-3 text-red-400" />}
-              <span className="text-xs font-semibold text-white/80">You</span>
+          <div className="absolute bottom-3 left-3">
+            <div className="bg-white border border-gray-200 rounded-md px-2.5 py-1 flex items-center gap-1.5 shadow-sm">
+              {!micOn && <MicOff className="w-3 h-3 text-gray-400" />}
+              <span className="text-xs font-semibold text-gray-600">You</span>
             </div>
           </div>
         </div>
 
-        {/* AI Interviewer panel (right) */}
-        <div className="w-[320px] shrink-0 flex flex-col gap-4">
+        {/* AI Officer panel */}
+        <div className="w-72 shrink-0 flex flex-col gap-4">
 
           {/* Officer card */}
-          <div className="relative flex-1 rounded-2xl overflow-hidden bg-[#111118] border border-white/5 shadow-2xl flex flex-col items-center justify-center p-6">
+          <div className="flex-1 rounded-xl border border-gray-100 bg-white flex flex-col items-center justify-center p-6 text-center shadow-sm">
 
-            {/* Ambient glow when speaking */}
-            <div className={`absolute inset-0 rounded-2xl transition-all duration-700 ${aiSpeaking ? "shadow-[inset_0_0_60px_rgba(99,102,241,0.15)]" : ""}`} />
-
-            {/* Avatar + speaking ring */}
-            <div className="relative mb-5">
-              {/* Outer pulse ring */}
-              {aiSpeaking && (
-                <>
-                  <div className="absolute -inset-3 rounded-full border-2 border-indigo-500/40 animate-ping" style={{ animationDuration: "1.5s" }} />
-                  <div className="absolute -inset-1.5 rounded-full border border-indigo-400/30 animate-pulse" />
-                </>
-              )}
-              <div className={`relative w-28 h-28 rounded-full overflow-hidden border-2 transition-all duration-500 ${aiSpeaking ? "border-indigo-400 shadow-[0_0_24px_rgba(99,102,241,0.5)]" : "border-white/10"}`}>
+            {/* Avatar with speaking ring */}
+            <div className="relative mb-4">
+              <div className={`absolute -inset-1.5 rounded-full border-2 transition-all duration-500 ${aiSpeaking ? "border-gray-400 opacity-100" : "border-transparent opacity-0"}`} />
+              <div className="relative w-24 h-24 rounded-full overflow-hidden border border-gray-200 shadow-sm">
                 <Image src="/visa-officer.png" alt="Visa Officer" fill className="object-cover" />
               </div>
             </div>
 
-            {/* Name + role */}
-            <h3 className="text-base font-semibold text-white mb-0.5">Officer Chen</h3>
-            <p className="text-xs text-white/40 mb-4 tracking-wide">U.S. Consular Officer · F-1 Visa</p>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">Consular Officer</p>
+            <h3 className="text-base font-semibold text-[#0a0a0a] mb-0.5">Officer Chen</h3>
+            <p className="text-xs text-gray-400 mb-4">U.S. Embassy · F-1 Division</p>
 
             {/* Speaking indicator */}
-            <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border transition-all duration-300 ${aiSpeaking
-                ? "bg-indigo-500/10 border-indigo-500/30"
+            <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-semibold uppercase tracking-widest transition-all duration-300 ${aiSpeaking
+                ? "border-gray-300 bg-[#fafafa] text-gray-600"
                 : callActive
-                  ? "bg-white/5 border-white/10"
-                  : "bg-yellow-500/10 border-yellow-500/20"
+                  ? "border-gray-100 bg-white text-gray-300"
+                  : "border-gray-100 bg-white text-gray-300"
               }`}>
               {aiSpeaking ? (
                 <>
-                  {/* Animated soundwave bars */}
                   {[0, 1, 2, 3].map((i) => (
                     <div
                       key={i}
-                      className="w-0.5 bg-indigo-400 rounded-full animate-bounce"
-                      style={{ height: `${8 + (i % 3) * 4}px`, animationDelay: `${i * 0.1}s`, animationDuration: "0.6s" }}
+                      className="w-0.5 bg-gray-500 rounded-full animate-bounce"
+                      style={{ height: `${8 + (i % 2) * 4}px`, animationDelay: `${i * 0.12}s`, animationDuration: "0.7s" }}
                     />
                   ))}
-                  <span className="text-[10px] font-semibold text-indigo-300 ml-1 tracking-wider uppercase">Speaking</span>
+                  <span className="ml-1">Speaking</span>
                 </>
               ) : (
-                <span className="text-[10px] font-semibold tracking-wider uppercase text-white/30">
-                  {callActive ? "Listening…" : "Connecting…"}
-                </span>
+                <span>{callActive ? "Listening" : "Connecting…"}</span>
               )}
-            </div>
-
-            {/* Info strip */}
-            <div className="absolute bottom-0 inset-x-0 border-t border-white/5 bg-white/[0.02] px-4 py-3 flex items-center justify-between">
-              <span className="text-[10px] text-white/25 uppercase tracking-widest">U.S. Embassy</span>
-              <span className="text-[10px] text-white/25 uppercase tracking-widest">AI Simulation</span>
             </div>
           </div>
 
-          {/* Tip card */}
-          <div className="rounded-xl border border-white/5 bg-white/[0.03] px-4 py-3">
-            <p className="text-[11px] text-white/30 leading-relaxed">
-              💡 <strong className="text-white/50">Tip:</strong> Speak clearly and answer truthfully.
-              The officer may ask follow-up questions based on your responses.
+          {/* Tip */}
+          <div className="rounded-xl border border-gray-100 bg-[#fafafa] px-4 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">Tip</p>
+            <p className="text-xs text-gray-500 leading-relaxed">
+              Keep answers short and direct. One or two clear sentences signal confidence.
             </p>
           </div>
         </div>
       </div>
 
-      {/* ── Control bar ───────────────────────────────────────────────── */}
-      <div className="relative z-10 flex items-center justify-center gap-4 pb-8 pt-2">
-        <div className="flex items-center gap-3 bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl px-6 py-4 shadow-2xl">
+      {/* ── Control bar ── */}
+      <div className="shrink-0 border-t border-gray-100 bg-white py-4 px-8 flex items-center justify-center gap-3">
 
-          {/* Mic */}
-          <ControlButton
-            active={micOn}
-            onClick={handleMicToggle}
-            activeIcon={<Mic className="w-5 h-5" />}
-            inactiveIcon={<MicOff className="w-5 h-5" />}
-            label={micOn ? "Mute" : "Unmute"}
-            inactiveColor="bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30"
-          />
+        {/* Mic */}
+        <button
+          onClick={handleMicToggle}
+          className={`flex flex-col items-center gap-1.5 group`}
+        >
+          <div className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-150 ${micOn
+              ? "bg-white border-gray-200 text-[#0a0a0a] hover:border-gray-400"
+              : "bg-[#fafafa] border-gray-300 text-gray-400"
+            }`}>
+            {micOn ? <Mic className="w-4.5 h-4.5" /> : <MicOff className="w-4.5 h-4.5" />}
+          </div>
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+            {micOn ? "Mute" : "Unmute"}
+          </span>
+        </button>
 
-          {/* Camera */}
-          <ControlButton
-            active={videoOn}
-            onClick={handleVideoToggle}
-            activeIcon={<Video className="w-5 h-5" />}
-            inactiveIcon={<VideoOff className="w-5 h-5" />}
-            label={videoOn ? "Hide camera" : "Show camera"}
-            inactiveColor="bg-red-500/20 border-red-500/30 text-red-400 hover:bg-red-500/30"
-          />
+        {/* Camera */}
+        <button
+          onClick={handleVideoToggle}
+          className="flex flex-col items-center gap-1.5 group"
+        >
+          <div className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-150 ${videoOn
+              ? "bg-white border-gray-200 text-[#0a0a0a] hover:border-gray-400"
+              : "bg-[#fafafa] border-gray-300 text-gray-400"
+            }`}>
+            {videoOn ? <Video className="w-4.5 h-4.5" /> : <VideoOff className="w-4.5 h-4.5" />}
+          </div>
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+            {videoOn ? "Hide cam" : "Show cam"}
+          </span>
+        </button>
 
-          {/* Divider */}
-          <div className="w-px h-8 bg-white/10 mx-1" />
+        <div className="w-px h-8 bg-gray-100 mx-2" />
 
-          {/* End call */}
-          <button
-            onClick={handleEndCall}
-            className="flex flex-col items-center gap-1.5 group"
-          >
-            <div className="w-12 h-12 rounded-xl bg-red-600 border border-red-500 flex items-center justify-center shadow-lg shadow-red-900/40 group-hover:bg-red-500 group-hover:scale-105 transition-all duration-200">
-              <PhoneOff className="w-5 h-5 text-white" />
-            </div>
-            <span className="text-[10px] text-white/30 group-hover:text-white/50 transition-colors">End</span>
-          </button>
-        </div>
+        {/* End call */}
+        <button
+          onClick={handleEndCall}
+          className="flex flex-col items-center gap-1.5 group"
+        >
+          <div className="w-11 h-11 rounded-xl bg-[#0a0a0a] border border-[#0a0a0a] text-white flex items-center justify-center transition-all duration-150 hover:bg-gray-800">
+            <PhoneOff className="w-4 h-4" />
+          </div>
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">End</span>
+        </button>
       </div>
     </div>
   );
 };
-
-// ─── Reusable control button ─────────────────────────────────────────────────
-const ControlButton = ({ active, onClick, activeIcon, inactiveIcon, label, inactiveColor }) => (
-  <button onClick={onClick} className="flex flex-col items-center gap-1.5 group">
-    <div className={`w-12 h-12 rounded-xl border flex items-center justify-center transition-all duration-200 group-hover:scale-105 ${active
-        ? "bg-white/10 border-white/15 text-white hover:bg-white/15"
-        : inactiveColor
-      }`}>
-      {active ? activeIcon : inactiveIcon}
-    </div>
-    <span className="text-[10px] text-white/30 group-hover:text-white/50 transition-colors">{label}</span>
-  </button>
-);
 
 export default Interview;
