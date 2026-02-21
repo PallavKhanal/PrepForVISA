@@ -111,7 +111,7 @@ const Interview = () => {
   if (showPostInterview) return <PostInterviewComponent />;
 
   return (
-    <div className="flex flex-col h-screen bg-white overflow-hidden">
+    <div className="flex flex-col h-full bg-white overflow-hidden">
 
       {/* ── Top bar ── */}
       <div className="shrink-0 flex items-center justify-between px-8 py-4 border-b border-gray-100">
@@ -174,15 +174,15 @@ const Interview = () => {
             </div>
 
             <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">Consular Officer</p>
-            <h3 className="text-base font-semibold text-[#0a0a0a] mb-0.5">Officer Chen</h3>
-            <p className="text-xs text-gray-400 mb-4">U.S. Embassy · F-1 Division</p>
+            <h3 className="text-base font-semibold text-[#0a0a0a] mb-0.5">Officer Mitchell</h3>
+            <p className="text-xs text-gray-400 mb-4">U.S. Consulate · F-1 Division</p>
 
             {/* Speaking indicator */}
             <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-semibold uppercase tracking-widest transition-all duration-300 ${aiSpeaking
-                ? "border-gray-300 bg-[#fafafa] text-gray-600"
-                : callActive
-                  ? "border-gray-100 bg-white text-gray-300"
-                  : "border-gray-100 bg-white text-gray-300"
+              ? "border-gray-300 bg-[#fafafa] text-gray-600"
+              : callActive
+                ? "border-gray-100 bg-white text-gray-300"
+                : "border-gray-100 bg-white text-gray-300"
               }`}>
               {aiSpeaking ? (
                 <>
@@ -220,8 +220,8 @@ const Interview = () => {
           className={`flex flex-col items-center gap-1.5 group`}
         >
           <div className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-150 ${micOn
-              ? "bg-white border-gray-200 text-[#0a0a0a] hover:border-gray-400"
-              : "bg-[#fafafa] border-gray-300 text-gray-400"
+            ? "bg-white border-gray-200 text-[#0a0a0a] hover:border-gray-400"
+            : "bg-[#fafafa] border-gray-300 text-gray-400"
             }`}>
             {micOn ? <Mic className="w-4.5 h-4.5" /> : <MicOff className="w-4.5 h-4.5" />}
           </div>
@@ -236,8 +236,8 @@ const Interview = () => {
           className="flex flex-col items-center gap-1.5 group"
         >
           <div className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-150 ${videoOn
-              ? "bg-white border-gray-200 text-[#0a0a0a] hover:border-gray-400"
-              : "bg-[#fafafa] border-gray-300 text-gray-400"
+            ? "bg-white border-gray-200 text-[#0a0a0a] hover:border-gray-400"
+            : "bg-[#fafafa] border-gray-300 text-gray-400"
             }`}>
             {videoOn ? <Video className="w-4.5 h-4.5" /> : <VideoOff className="w-4.5 h-4.5" />}
           </div>

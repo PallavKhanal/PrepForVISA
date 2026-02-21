@@ -7,7 +7,7 @@ const PostInterviewComponent = () => {
   const router = useRouter();
 
   return (
-    <div className="flex items-center justify-center h-screen w-full bg-white">
+    <div className="flex items-center justify-center h-full w-full bg-white">
       <div className="w-full max-w-md mx-4">
 
         <div className="rounded-xl border border-gray-100 bg-white shadow-sm overflow-hidden">
