@@ -315,8 +315,8 @@ export default function Home() {
             © {new Date().getFullYear()} PrepForVISA. Built for students with ambition.
           </p>
           <div className="flex gap-6 text-xs text-gray-400">
-            <a href="#" className="hover:text-black transition-colors">Privacy</a>
-            <a href="#" className="hover:text-black transition-colors">Terms</a>
+            <Link href="/legal" className="hover:text-black transition-colors">Privacy</Link>
+            <Link href="/legal" className="hover:text-black transition-colors">Terms</Link>
             <Link href="/auth" className="hover:text-black transition-colors">Sign In</Link>
           </div>
         </div>

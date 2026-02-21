@@ -1,5 +1,5 @@
 
-import { LayoutDashboard, Megaphone , Wallet , List, CreditCard, Focus  } from "lucide-react";
+import { LayoutDashboard, Megaphone , Wallet , List, CreditCard, Shield  } from "lucide-react";
 
 export const SidebarOptions = [
     {
@@ -28,9 +28,9 @@ export const SidebarOptions = [
         path : "/donate-us"
     },
     {
-        name:"About me",
-        icon:Focus,
-        path:"/about-me"
+        name:"Support & Legal",
+        icon:Shield,
+        path:"/legal"
     },
 ]
 
