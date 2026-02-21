@@ -1,10 +1,21 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight, CheckCircle2, XCircle, Clock } from "lucide-react";
 
-const PostInterviewComponent = () => {
+const formatDuration = (seconds) => {
+  if (!seconds) return null;
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return m > 0 ? `${m}m ${s}s` : `${s}s`;
+};
+
+const PostInterviewComponent = ({ outcome = "unknown", durationSeconds = 0 }) => {
   const router = useRouter();
+
+  const isApproved = outcome === "approved";
+  const isDenied = outcome === "denied";
+  const duration = formatDuration(durationSeconds);
 
   return (
     <div className="flex items-center justify-center h-full w-full bg-white">
@@ -24,6 +35,30 @@ const PostInterviewComponent = () => {
             <h2 className="text-2xl font-bold tracking-tight text-[#0a0a0a] mb-2">
               Interview Finished
             </h2>
+
+            {/* Outcome badge */}
+            {(isApproved || isDenied) && (
+              <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-semibold uppercase tracking-widest mb-4 ${
+                isApproved
+                  ? "bg-emerald-50 border-emerald-200 text-emerald-700"
+                  : "bg-red-50 border-red-200 text-red-600"
+              }`}>
+                {isApproved
+                  ? <CheckCircle2 className="w-3.5 h-3.5" />
+                  : <XCircle className="w-3.5 h-3.5" />
+                }
+                {isApproved ? "Visa Approved" : "Visa Denied"}
+              </div>
+            )}
+
+            {/* Duration */}
+            {duration && (
+              <div className="flex items-center justify-center gap-1.5 text-xs text-gray-400 mb-6">
+                <Clock className="w-3.5 h-3.5" />
+                <span>{duration}</span>
+              </div>
+            )}
+
             <p className="text-sm text-gray-500 leading-relaxed mb-8 max-w-xs mx-auto">
               Your mock F-1 visa interview has ended. Review your session history on the dashboard.
             </p>

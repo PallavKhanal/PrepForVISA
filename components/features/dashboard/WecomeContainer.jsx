@@ -2,8 +2,13 @@
 import React from 'react';
 import { useUser } from '@/app/Provider';
 
-const WelcomeContainer = () => {
+const WelcomeContainer = ({ mockInterviews = [] }) => {
   const { user } = useUser();
+
+  const recentCount = mockInterviews.filter((m) => {
+    const daysDiff = (Date.now() - new Date(m.created_at)) / (1000 * 86400);
+    return daysDiff <= 7;
+  }).length;
 
   return (
     <div className="pt-2 pb-10 mb-10 border-b border-gray-100">
@@ -16,7 +21,10 @@ const WelcomeContainer = () => {
             Welcome back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}.
           </h1>
           <p className="text-sm text-gray-500 mt-3 leading-relaxed max-w-md">
-            Continue your preparation. You have <span className="font-semibold text-[#0a0a0a]">2 sessions</span> ready to review.
+            {recentCount > 0
+              ? <>Continue your preparation. You have <span className="font-semibold text-[#0a0a0a]">{recentCount} session{recentCount !== 1 ? 's' : ''}</span> this week.</>
+              : <>Start your preparation. Complete your first mock interview to track progress.</>
+            }
           </p>
         </div>
         <div className="shrink-0">

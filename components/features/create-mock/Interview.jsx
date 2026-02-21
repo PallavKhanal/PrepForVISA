@@ -5,17 +5,24 @@ import React, { useState, useEffect, useRef } from "react";
 import { Mic, MicOff, Video, VideoOff, PhoneOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Vapi from "@vapi-ai/web";
+import supabase from "@/lib/supabase";
+import { useUser } from "@/app/Provider";
 
-const DECISION_KEYWORDS = [
+const APPROVED_KEYWORDS = [
   "visa is approved", "visa is accepted", "visa has been approved", "visa has been accepted",
+  "application is approved",
+];
+
+const DENIED_KEYWORDS = [
   "visa is rejected", "visa is denied", "visa has been rejected", "visa has been denied",
-  "application is approved", "application is rejected", "cannot grant you", "i am unable to approve",
+  "application is rejected", "cannot grant you", "i am unable to approve",
 ];
 
 const formatTime = (s) =>
   `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
 const Interview = () => {
+  const { user } = useUser();
   const [micOn, setMicOn] = useState(true);
   const [videoOn, setVideoOn] = useState(true);
   const [callActive, setCallActive] = useState(false);
@@ -23,6 +30,7 @@ const Interview = () => {
   const [aiSpeaking, setAiSpeaking] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [showPostInterview, setShowPostInterview] = useState(false);
+  const [interviewOutcome, setInterviewOutcome] = useState("unknown");
 
   const vapiRef = useRef(null);
   const videoRef = useRef(null);
@@ -31,10 +39,43 @@ const Interview = () => {
   const elapsedRef = useRef(null);
   const mountedRef = useRef(false);
 
-  // No endingRef guard — each op is null-checked so multiple calls are safe.
-  // The old guard was causing the End button to silently no-op when Vapi events
-  // (call-end / message keywords) fired handleEndCall before the user clicked.
+  // Refs to track call data — safe in stale closures since we read .current at call-time
+  const callIdRef = useRef(null);
+  const outcomeRef = useRef("unknown");
+  const transcriptRef = useRef([]);
+  const elapsedSecondsRef = useRef(0);
+  const savedRef = useRef(false);
+  const userEmailRef = useRef(null);
+
+  // Keep userEmailRef current whenever user loads (user starts null, loads async)
+  useEffect(() => {
+    userEmailRef.current = user?.email || null;
+  }, [user]);
+
   const handleEndCall = () => {
+    // Snapshot all data before async cleanup mutates refs
+    const finalDuration = elapsedSecondsRef.current;
+    const finalOutcome = outcomeRef.current;
+    const finalTranscript = [...transcriptRef.current];
+    const finalCallId = callIdRef.current;
+    const email = userEmailRef.current;
+
+    // Persist to Supabase exactly once
+    if (!savedRef.current && email) {
+      savedRef.current = true;
+      supabase
+        .from("MockInterviews")
+        .insert([{
+          call_id: finalCallId,
+          user_email: email,
+          duration_seconds: finalDuration,
+          outcome: finalOutcome,
+          transcript: finalTranscript,
+        }])
+        .then(() => {})
+        .catch((e) => console.warn("Failed to save interview:", e));
+    }
+
     try { if (vapiRef.current) { vapiRef.current.stop(); vapiRef.current = null; } } catch (_) { }
     try { if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; } } catch (_) { }
     if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
@@ -42,6 +83,7 @@ const Interview = () => {
     setCallActive(false);
     setConnecting(false);
     setAiSpeaking(false);
+    setInterviewOutcome(finalOutcome);
     setShowPostInterview(true);
   };
 
@@ -63,19 +105,35 @@ const Interview = () => {
     v.on("speech-start", () => setAiSpeaking(true));
     v.on("speech-end", () => setAiSpeaking(false));
     v.on("message", (msg) => {
+      // Collect finalized transcript turns
+      if (msg?.type === "transcript" && msg?.transcriptType === "final" && msg?.transcript) {
+        transcriptRef.current.push({ role: msg.role, text: msg.transcript });
+      }
+
+      // Detect visa outcome from assistant messages
       if (msg?.role === "assistant" && msg?.content) {
         const text = msg.content.toLowerCase();
-        if (DECISION_KEYWORDS.some((kw) => text.includes(kw))) {
+        if (APPROVED_KEYWORDS.some((kw) => text.includes(kw))) {
+          outcomeRef.current = "approved";
+          setTimeout(() => handleEndCall(), 2000);
+        } else if (DENIED_KEYWORDS.some((kw) => text.includes(kw))) {
+          outcomeRef.current = "denied";
           setTimeout(() => handleEndCall(), 2000);
         }
       }
     });
 
     v.start(process.env.NEXT_PUBLIC_VAPI_AGENT_ID)
-      .then(() => {
+      .then((call) => {
+        callIdRef.current = call?.id || null;
         setCallActive(true);
         setConnecting(false);
-        elapsedRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
+        elapsedRef.current = setInterval(() => {
+          setElapsed((s) => {
+            elapsedSecondsRef.current = s + 1;
+            return s + 1;
+          });
+        }, 1000);
         timerRef.current = setTimeout(() => handleEndCall(), 600_000);
       })
       .catch((err) => console.error("Call start failed:", err));
@@ -110,7 +168,12 @@ const Interview = () => {
     });
   };
 
-  if (showPostInterview) return <PostInterviewComponent />;
+  if (showPostInterview) return (
+    <PostInterviewComponent
+      outcome={interviewOutcome}
+      durationSeconds={elapsedSecondsRef.current}
+    />
+  );
 
   return (
     <div className="flex flex-col h-full bg-white overflow-hidden">
@@ -167,7 +230,7 @@ const Interview = () => {
           {/* Officer card */}
           <div className="flex-1 rounded-xl border border-gray-100 bg-white flex flex-col items-center justify-center p-6 text-center shadow-sm relative overflow-hidden">
 
-            {/* Connecting overlay — shown before vapi.start() resolves */}
+            {/* Connecting overlay */}
             {connecting && (
               <div className="absolute inset-0 bg-white/95 flex flex-col items-center justify-center z-10 rounded-xl">
                 <Loader2 className="w-6 h-6 text-gray-400 animate-spin mb-3" />
