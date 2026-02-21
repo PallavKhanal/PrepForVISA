@@ -28,8 +28,18 @@ const formatTime = (s) =>
 
 const Interview = () => {
   const { user } = useUser();
-  const [micOn, setMicOn] = useState(true);
-  const [videoOn, setVideoOn] = useState(true);
+
+  // Read camera/mic defaults saved in Settings
+  const getPrefs = () => {
+    try {
+      const p = JSON.parse(localStorage.getItem("interviewPrefs") || "{}");
+      return { camera: p.camera ?? true, mic: p.mic ?? true };
+    } catch { return { camera: true, mic: true }; }
+  };
+  const prefs = getPrefs();
+
+  const [micOn, setMicOn] = useState(prefs.mic);
+  const [videoOn, setVideoOn] = useState(prefs.camera);
   const [callActive, setCallActive] = useState(false);
   const [connecting, setConnecting] = useState(true);
   const [aiSpeaking, setAiSpeaking] = useState(false);
