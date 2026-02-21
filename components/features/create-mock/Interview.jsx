@@ -130,20 +130,51 @@ const Interview = () => {
       }
     });
 
-    v.start(process.env.NEXT_PUBLIC_VAPI_AGENT_ID)
-      .then((call) => {
-        callIdRef.current = call?.id || null;
-        setCallActive(true);
-        setConnecting(false);
-        elapsedRef.current = setInterval(() => {
-          setElapsed((s) => {
-            elapsedSecondsRef.current = s + 1;
-            return s + 1;
+    const startCall = async () => {
+      // Build previous-topics context from up to 3 prior interviews
+      let previousTopics = "This is the applicant's first interview. You have no prior context about them.";
+      const email = userEmailRef.current;
+      if (email) {
+        const { data } = await supabase
+          .from("MockInterviews")
+          .select("transcript, created_at")
+          .eq("user_email", email)
+          .order("created_at", { ascending: false })
+          .limit(3);
+        if (data && data.length > 0) {
+          const questions = [];
+          data.forEach((session) => {
+            (session.transcript || []).forEach((turn) => {
+              if (turn.role === "assistant" && turn.text?.includes("?")) {
+                questions.push(turn.text.trim());
+              }
+            });
           });
-        }, 1000);
-        timerRef.current = setTimeout(() => handleEndCall(), 600_000);
+          if (questions.length > 0) {
+            previousTopics = `The applicant has completed ${data.length} previous mock interview(s). Questions asked in prior sessions:\n${questions.map((q, i) => `${i + 1}. ${q}`).join("\n")}\n\nDo NOT repeat these questions. Choose completely different angles.`;
+          }
+        }
+      }
+
+      v.start(process.env.NEXT_PUBLIC_VAPI_AGENT_ID, {
+        variableValues: { previousTopics },
       })
-      .catch((err) => console.error("Call start failed:", err));
+        .then((call) => {
+          callIdRef.current = call?.id || null;
+          setCallActive(true);
+          setConnecting(false);
+          elapsedRef.current = setInterval(() => {
+            setElapsed((s) => {
+              elapsedSecondsRef.current = s + 1;
+              return s + 1;
+            });
+          }, 1000);
+          timerRef.current = setTimeout(() => handleEndCall(), 600_000);
+        })
+        .catch((err) => console.error("Call start failed:", err));
+    };
+
+    startCall();
 
     const onVisibility = () => { if (document.hidden && mountedRef.current) handleEndCall(); };
     document.addEventListener("visibilitychange", onVisibility);
