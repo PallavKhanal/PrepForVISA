@@ -18,10 +18,10 @@ const formatDuration = (seconds) => {
 };
 
 const STATUS_STYLES = {
-  Completed: 'bg-[#fafafa] border-gray-200 text-gray-700',
-  Generated: 'bg-[#fafafa] border-gray-200 text-gray-700',
-  Approved: 'bg-emerald-50 border-emerald-200 text-emerald-700',
-  Denied: 'bg-red-50 border-red-200 text-red-600',
+  Completed: 'bg-muted border-border text-muted-foreground',
+  Generated: 'bg-muted border-border text-muted-foreground',
+  Approved: 'bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-950/20 dark:border-emerald-800 dark:text-emerald-400',
+  Denied: 'bg-red-50 border-red-200 text-red-600 dark:bg-red-950/20 dark:border-red-800 dark:text-red-400',
 };
 
 const LatestInterviewList = ({ mockInterviews = [], interviews = [], loading = false }) => {
@@ -51,19 +51,19 @@ const LatestInterviewList = ({ mockInterviews = [], interviews = [], loading = f
     .slice(0, 10);
 
   return (
-    <div className="bg-white border border-gray-100 hover:border-gray-300 transition-all duration-150 rounded-xl overflow-hidden mt-12">
+    <div className="bg-background border border-border hover:border-input transition-all duration-150 rounded-xl overflow-hidden mt-12">
 
       {/* Header */}
-      <div className="px-8 py-6 border-b border-gray-100 flex items-start justify-between">
+      <div className="px-8 py-6 border-b border-border flex items-start justify-between">
         <div>
-          <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">
+          <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">
             History
           </p>
-          <h2 className="font-semibold text-base text-[#0a0a0a]">Recent Sessions</h2>
+          <h2 className="font-semibold text-base text-foreground">Recent Sessions</h2>
         </div>
         <button
           onClick={() => router.push('/dashboard/create-mock')}
-          className="inline-flex items-center gap-2 bg-[#0a0a0a] text-white text-sm font-medium px-5 py-2 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150"
+          className="inline-flex items-center gap-2 bg-foreground text-background text-sm font-medium px-5 py-2 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150"
         >
           <Plus size={14} />
           New session
@@ -72,17 +72,17 @@ const LatestInterviewList = ({ mockInterviews = [], interviews = [], loading = f
 
       {/* Empty state */}
       {!loading && allRows.length === 0 ? (
-        <div className="py-20 flex flex-col items-center justify-center bg-[#fafafa]">
-          <div className="w-10 h-10 rounded-lg bg-white border border-gray-200 flex items-center justify-center mb-5 text-gray-400">
+        <div className="py-20 flex flex-col items-center justify-center bg-muted">
+          <div className="w-10 h-10 rounded-lg bg-background border border-border flex items-center justify-center mb-5 text-muted-foreground">
             <Video size={18} />
           </div>
-          <h3 className="font-semibold text-base text-[#0a0a0a] mb-2">No sessions yet</h3>
-          <p className="text-sm text-gray-500 mb-8 max-w-xs text-center leading-relaxed">
+          <h3 className="font-semibold text-base text-foreground mb-2">No sessions yet</h3>
+          <p className="text-sm text-muted-foreground mb-8 max-w-xs text-center leading-relaxed">
             You haven't created any practice sessions yet. Start your first one now.
           </p>
           <button
             onClick={() => router.push('/dashboard/create-mock')}
-            className="inline-flex items-center gap-2 bg-[#0a0a0a] text-white text-sm font-medium px-7 py-3 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150"
+            className="inline-flex items-center gap-2 bg-foreground text-background text-sm font-medium px-7 py-3 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150"
           >
             Get started
           </button>
@@ -90,39 +90,39 @@ const LatestInterviewList = ({ mockInterviews = [], interviews = [], loading = f
       ) : (
         <div className="overflow-x-auto">
           <table className="w-full text-sm text-left">
-            <thead className="bg-[#fafafa] border-b border-gray-100">
+            <thead className="bg-muted border-b border-border">
               <tr>
                 {['Session', 'Type', 'Date', 'Duration', 'Outcome', ''].map((col) => (
                   <th
                     key={col}
                     scope="col"
-                    className="px-8 py-4 text-[11px] font-semibold tracking-widest text-gray-400 uppercase whitespace-nowrap"
+                    className="px-8 py-4 text-[11px] font-semibold tracking-widest text-muted-foreground uppercase whitespace-nowrap"
                   >
                     {col}
                   </th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-100">
+            <tbody className="divide-y divide-border">
               {allRows.map((item) => (
-                <tr key={item.id} className="bg-white hover:bg-[#fafafa] transition-colors duration-150 group">
+                <tr key={item.id} className="bg-background hover:bg-muted transition-colors duration-150 group">
 
                   {/* Title + icon */}
                   <td className="px-8 py-5 whitespace-nowrap">
                     <div className="flex items-center gap-3">
-                      <div className="w-8 h-8 rounded-lg bg-[#fafafa] border border-gray-100 text-gray-500 flex items-center justify-center shrink-0">
+                      <div className="w-8 h-8 rounded-lg bg-muted border border-border text-muted-foreground flex items-center justify-center shrink-0">
                         {item.type === 'Mock Interview'
                           ? <Video size={14} />
                           : <FileText size={14} />
                         }
                       </div>
-                      <span className="font-semibold text-[#0a0a0a]">{item.title}</span>
+                      <span className="font-semibold text-foreground">{item.title}</span>
                     </div>
                   </td>
 
-                  <td className="px-8 py-5 whitespace-nowrap text-gray-500">{item.type}</td>
-                  <td className="px-8 py-5 whitespace-nowrap text-gray-500">{formatDate(item.date)}</td>
-                  <td className="px-8 py-5 whitespace-nowrap text-gray-500">{item.duration}</td>
+                  <td className="px-8 py-5 whitespace-nowrap text-muted-foreground">{item.type}</td>
+                  <td className="px-8 py-5 whitespace-nowrap text-muted-foreground">{formatDate(item.date)}</td>
+                  <td className="px-8 py-5 whitespace-nowrap text-muted-foreground">{item.duration}</td>
 
                   {/* Status badge */}
                   <td className="px-8 py-5 whitespace-nowrap">
@@ -133,7 +133,7 @@ const LatestInterviewList = ({ mockInterviews = [], interviews = [], loading = f
 
                   {/* Actions */}
                   <td className="px-8 py-5 whitespace-nowrap text-right">
-                    <button className="text-gray-300 hover:text-[#0a0a0a] p-1.5 rounded-md hover:bg-gray-100 transition-all duration-150">
+                    <button className="text-muted-foreground/40 hover:text-foreground p-1.5 rounded-md hover:bg-muted transition-all duration-150">
                       <MoreHorizontal size={16} />
                     </button>
                   </td>

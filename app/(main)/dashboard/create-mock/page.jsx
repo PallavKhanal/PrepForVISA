@@ -5,7 +5,7 @@ import InterviewIntro from "@/components/features/create-mock/InterviewIntro";
 // the dashboard sidebar + header + content padding layout entirely.
 const CreateMock = () => {
   return (
-    <div className="fixed inset-0 z-50 bg-white">
+    <div className="fixed inset-0 z-50 bg-background">
       <InterviewIntro />
     </div>
   );

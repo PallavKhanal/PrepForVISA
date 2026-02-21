@@ -1,9 +1,17 @@
 "use client"
 import supabase from '@/lib/supabase'
-import { User } from 'lucide-react';
 import React, { useEffect, useContext, useState}  from 'react'
 import { UserDetailContext } from '@/lib/UserDetailContext';
+import { ThemeProvider, useTheme } from 'next-themes';
 
+// Syncs the user's saved theme preference from the DB into next-themes
+function ThemeSync({ user }) {
+  const { setTheme } = useTheme();
+  useEffect(() => {
+    if (user?.theme) setTheme(user.theme);
+  }, [user?.theme]);
+  return null;
+}
 
 const Provider = ({children}) => {
 
@@ -20,8 +28,6 @@ const Provider = ({children}) => {
     .select("*")
     .eq('email', user?.email);
 
-    console.log(Users);
-
     if(Users.length == 0){
         const { data, error } = await supabase.from('Users').insert([
             {
@@ -29,20 +35,21 @@ const Provider = ({children}) => {
                 name: user?.user_metadata.name,
                 picture: user?.user_metadata.picture
             }
-        ]);
-         console.log("User created: ", data);
-         setUser(data);
+        ]).select();
+         setUser(data?.[0]);
         return;
     }
     setUser(Users[0]);
     });
   }
 
-  
     return (
-    <UserDetailContext.Provider value={{user, setUser}}>
-    <div>{children}</div>
-    </UserDetailContext.Provider>
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+      <UserDetailContext.Provider value={{user, setUser}}>
+        <ThemeSync user={user} />
+        <div>{children}</div>
+      </UserDetailContext.Provider>
+    </ThemeProvider>
   )
 }
 

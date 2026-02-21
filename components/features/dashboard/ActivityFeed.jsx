@@ -38,42 +38,42 @@ const ActivityFeed = ({ mockInterviews = [], interviews = [] }) => {
     .slice(0, 4);
 
   return (
-    <div className="bg-white border border-gray-100 hover:border-gray-300 rounded-xl p-8 transition-all duration-150 h-full flex flex-col">
+    <div className="bg-background border border-border hover:border-input rounded-xl p-8 transition-all duration-150 h-full flex flex-col">
       <div className="mb-8">
-        <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-2">
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-2">
           Activity
         </p>
-        <h3 className="font-semibold text-base text-[#0a0a0a]">Recent Activity</h3>
+        <h3 className="font-semibold text-base text-foreground">Recent Activity</h3>
       </div>
 
       <div className="relative flex-1">
         {activities.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-gray-400 py-8">
-            <CheckCircle2 className="w-8 h-8 mb-3 text-gray-200" />
+          <div className="flex flex-col items-center justify-center h-full text-muted-foreground py-8">
+            <CheckCircle2 className="w-8 h-8 mb-3 text-border" />
             <p className="text-sm font-medium">No activity yet</p>
             <p className="text-xs mt-1">Your sessions will appear here</p>
           </div>
         ) : (
           <>
             {/* Timeline line */}
-            <div className="absolute left-[15px] top-2 bottom-2 w-px bg-gray-100" />
+            <div className="absolute left-[15px] top-2 bottom-2 w-px bg-border" />
 
             <ul className="space-y-6">
               {activities.map((item) => {
                 const Icon = item.icon;
                 return (
                   <li key={item.id} className="relative flex items-start gap-4 group">
-                    <div className="relative z-10 w-8 h-8 rounded-lg bg-gray-50 text-gray-700 border border-gray-100 flex items-center justify-center shrink-0 transition-all duration-150 group-hover:border-gray-300">
+                    <div className="relative z-10 w-8 h-8 rounded-lg bg-muted text-foreground/80 border border-border flex items-center justify-center shrink-0 transition-all duration-150 group-hover:border-input">
                       <Icon size={14} />
                     </div>
                     <div className="flex-1 min-w-0 pt-0.5">
-                      <p className="text-sm font-semibold text-[#0a0a0a] leading-snug">
+                      <p className="text-sm font-semibold text-foreground leading-snug">
                         {item.title}
                       </p>
-                      <p className="text-sm text-gray-500 mt-0.5 leading-relaxed truncate">
+                      <p className="text-sm text-muted-foreground mt-0.5 leading-relaxed truncate">
                         {item.description}
                       </p>
-                      <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mt-1.5">
+                      <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mt-1.5">
                         {timeAgo(item.time)}
                       </p>
                     </div>
@@ -85,7 +85,7 @@ const ActivityFeed = ({ mockInterviews = [], interviews = [] }) => {
         )}
       </div>
 
-      <button className="mt-8 w-full py-2.5 text-sm font-medium text-gray-600 border border-gray-200 hover:border-gray-400 hover:text-[#0a0a0a] bg-white rounded-lg transition-all duration-150">
+      <button className="mt-8 w-full py-2.5 text-sm font-medium text-muted-foreground border border-border hover:border-input hover:text-foreground bg-background rounded-lg transition-all duration-150">
         View all activity
       </button>
     </div>

@@ -224,24 +224,24 @@ const Interview = () => {
   );
 
   return (
-    <div className="flex flex-col h-full bg-white overflow-hidden">
+    <div className="flex flex-col h-full bg-background overflow-hidden">
 
       {/* ── Top bar ── */}
-      <div className="shrink-0 flex items-center justify-between px-8 py-4 border-b border-gray-100">
+      <div className="shrink-0 flex items-center justify-between px-8 py-4 border-b border-border">
         <div className="flex items-center gap-2.5">
           <span className="relative flex h-2 w-2">
             {callActive && <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />}
-            <span className={`relative inline-flex rounded-full h-2 w-2 ${callActive ? "bg-emerald-500" : "bg-gray-300"}`} />
+            <span className={`relative inline-flex rounded-full h-2 w-2 ${callActive ? "bg-emerald-500" : "bg-muted-foreground/30"}`} />
           </span>
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">
+          <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
             {callActive ? "Live Interview" : "Connecting…"}
           </span>
         </div>
 
         <div className="flex items-center gap-4">
-          <span className="font-mono text-sm text-gray-400 tabular-nums">{formatTime(elapsed)}</span>
-          <div className="h-3.5 w-px bg-gray-200" />
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-gray-400">F-1 Visa · Mock Interview</span>
+          <span className="font-mono text-sm text-muted-foreground tabular-nums">{formatTime(elapsed)}</span>
+          <div className="h-3.5 w-px bg-border" />
+          <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">F-1 Visa · Mock Interview</span>
         </div>
       </div>
 
@@ -249,7 +249,7 @@ const Interview = () => {
       <div className="flex flex-1 gap-6 p-6 min-h-0">
 
         {/* Self video */}
-        <div className="relative flex-1 rounded-xl overflow-hidden bg-[#fafafa] border border-gray-100">
+        <div className="relative flex-1 rounded-xl overflow-hidden bg-muted border border-border">
           <video
             ref={videoRef}
             autoPlay muted playsInline
@@ -257,17 +257,17 @@ const Interview = () => {
           />
           {!videoOn && (
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className="w-14 h-14 rounded-full bg-white border border-gray-200 flex items-center justify-center mb-2 shadow-sm">
-                <VideoOff className="w-6 h-6 text-gray-400" />
+              <div className="w-14 h-14 rounded-full bg-background border border-border flex items-center justify-center mb-2 shadow-sm">
+                <VideoOff className="w-6 h-6 text-muted-foreground" />
               </div>
-              <p className="text-sm text-gray-400 font-medium">Camera off</p>
+              <p className="text-sm text-muted-foreground font-medium">Camera off</p>
             </div>
           )}
           {/* Self label */}
           <div className="absolute bottom-3 left-3">
-            <div className="bg-white border border-gray-200 rounded-md px-2.5 py-1 flex items-center gap-1.5 shadow-sm">
-              {!micOn && <MicOff className="w-3 h-3 text-gray-400" />}
-              <span className="text-xs font-semibold text-gray-600">You</span>
+            <div className="bg-background border border-border rounded-md px-2.5 py-1 flex items-center gap-1.5 shadow-sm">
+              {!micOn && <MicOff className="w-3 h-3 text-muted-foreground" />}
+              <span className="text-xs font-semibold text-foreground/80">You</span>
             </div>
           </div>
         </div>
@@ -276,40 +276,40 @@ const Interview = () => {
         <div className="w-72 shrink-0 flex flex-col gap-4">
 
           {/* Officer card */}
-          <div className="flex-1 rounded-xl border border-gray-100 bg-white flex flex-col items-center justify-center p-6 text-center shadow-sm relative overflow-hidden">
+          <div className="flex-1 rounded-xl border border-border bg-background flex flex-col items-center justify-center p-6 text-center shadow-sm relative overflow-hidden">
 
             {/* Connecting overlay */}
             {connecting && (
-              <div className="absolute inset-0 bg-white/95 flex flex-col items-center justify-center z-10 rounded-xl">
-                <Loader2 className="w-6 h-6 text-gray-400 animate-spin mb-3" />
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">Please wait</p>
-                <p className="text-xs text-gray-400">Connecting to Officer Mitchell…</p>
+              <div className="absolute inset-0 bg-background/95 flex flex-col items-center justify-center z-10 rounded-xl">
+                <Loader2 className="w-6 h-6 text-muted-foreground animate-spin mb-3" />
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">Please wait</p>
+                <p className="text-xs text-muted-foreground">Connecting to Officer Mitchell…</p>
               </div>
             )}
 
             {/* Avatar with speaking ring */}
             <div className="relative mb-4">
-              <div className={`absolute -inset-1.5 rounded-full border-2 transition-all duration-500 ${aiSpeaking ? "border-gray-400 opacity-100" : "border-transparent opacity-0"}`} />
-              <div className="relative w-24 h-24 rounded-full overflow-hidden border border-gray-200 shadow-sm">
+              <div className={`absolute -inset-1.5 rounded-full border-2 transition-all duration-500 ${aiSpeaking ? "border-border opacity-100" : "border-transparent opacity-0"}`} />
+              <div className="relative w-24 h-24 rounded-full overflow-hidden border border-border shadow-sm">
                 <Image src="/visa-officer.png" alt="Visa Officer" fill className="object-cover" />
               </div>
             </div>
 
-            <p className="text-[10px] font-semibold uppercase tracking-widest text-gray-400 mb-1">Consular Officer</p>
-            <h3 className="text-base font-semibold text-[#0a0a0a] mb-0.5">Officer Mitchell</h3>
-            <p className="text-xs text-gray-400 mb-4">U.S. Consulate · F-1 Division</p>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">Consular Officer</p>
+            <h3 className="text-base font-semibold text-foreground mb-0.5">Officer Mitchell</h3>
+            <p className="text-xs text-muted-foreground mb-4">U.S. Consulate · F-1 Division</p>
 
             {/* Speaking indicator */}
             <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-semibold uppercase tracking-widest transition-all duration-300 ${aiSpeaking
-                ? "border-gray-300 bg-[#fafafa] text-gray-600"
-                : "border-gray-100 bg-white text-gray-300"
+                ? "border-border bg-muted text-foreground/80"
+                : "border-border bg-background text-muted-foreground/50"
               }`}>
               {aiSpeaking ? (
                 <>
                   {[0, 1, 2, 3].map((i) => (
                     <div
                       key={i}
-                      className="w-0.5 bg-gray-500 rounded-full animate-bounce"
+                      className="w-0.5 bg-foreground/60 rounded-full animate-bounce"
                       style={{ height: `${8 + (i % 2) * 4}px`, animationDelay: `${i * 0.12}s`, animationDuration: "0.7s" }}
                     />
                   ))}
@@ -322,9 +322,9 @@ const Interview = () => {
           </div>
 
           {/* Tip */}
-          <div className="rounded-xl border border-gray-100 bg-[#fafafa] px-4 py-3">
-            <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">Tip</p>
-            <p className="text-xs text-gray-500 leading-relaxed">
+          <div className="rounded-xl border border-border bg-muted px-4 py-3">
+            <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">Tip</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">
               Keep answers short and direct. One or two clear sentences signal confidence.
             </p>
           </div>
@@ -332,7 +332,7 @@ const Interview = () => {
       </div>
 
       {/* ── Control bar ── */}
-      <div className="shrink-0 border-t border-gray-100 bg-white py-4 px-8 flex items-center justify-center gap-3">
+      <div className="shrink-0 border-t border-border bg-background py-4 px-8 flex items-center justify-center gap-3">
 
         {/* Mic */}
         <button
@@ -340,12 +340,12 @@ const Interview = () => {
           className={`flex flex-col items-center gap-1.5 group`}
         >
           <div className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-150 ${micOn
-            ? "bg-white border-gray-200 text-[#0a0a0a] hover:border-gray-400"
-            : "bg-[#fafafa] border-gray-300 text-gray-400"
+            ? "bg-background border-border text-foreground hover:border-input"
+            : "bg-muted border-border text-muted-foreground"
             }`}>
             {micOn ? <Mic className="w-4.5 h-4.5" /> : <MicOff className="w-4.5 h-4.5" />}
           </div>
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
             {micOn ? "Mute" : "Unmute"}
           </span>
         </button>
@@ -356,27 +356,27 @@ const Interview = () => {
           className="flex flex-col items-center gap-1.5 group"
         >
           <div className={`w-11 h-11 rounded-xl border flex items-center justify-center transition-all duration-150 ${videoOn
-            ? "bg-white border-gray-200 text-[#0a0a0a] hover:border-gray-400"
-            : "bg-[#fafafa] border-gray-300 text-gray-400"
+            ? "bg-background border-border text-foreground hover:border-input"
+            : "bg-muted border-border text-muted-foreground"
             }`}>
             {videoOn ? <Video className="w-4.5 h-4.5" /> : <VideoOff className="w-4.5 h-4.5" />}
           </div>
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
             {videoOn ? "Hide cam" : "Show cam"}
           </span>
         </button>
 
-        <div className="w-px h-8 bg-gray-100 mx-2" />
+        <div className="w-px h-8 bg-border mx-2" />
 
         {/* End call */}
         <button
           onClick={handleEndCall}
           className="flex flex-col items-center gap-1.5 group"
         >
-          <div className="w-11 h-11 rounded-xl bg-[#0a0a0a] border border-[#0a0a0a] text-white flex items-center justify-center transition-all duration-150 hover:bg-gray-800">
+          <div className="w-11 h-11 rounded-xl bg-foreground border border-foreground text-background flex items-center justify-center transition-all duration-150 hover:opacity-80">
             <PhoneOff className="w-4 h-4" />
           </div>
-          <span className="text-[10px] font-semibold uppercase tracking-widest text-gray-400">End</span>
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">End</span>
         </button>
       </div>
     </div>

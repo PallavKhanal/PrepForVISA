@@ -14,9 +14,9 @@ const FormContainer = ({ handleInputChange, GoToNext }) => {
       </div>
 
       <div className="mb-1">
-        <div className="flex items-center gap-2 px-3 py-2 bg-gray-50 border border-gray-200 rounded-md text-sm text-gray-600 w-full">
-          <span className="font-semibold text-gray-900">Country:</span> United States of America (USA)
-          <span className="ml-auto text-xs text-gray-400 font-medium uppercase tracking-wider">F1 Visa</span>
+        <div className="flex items-center gap-2 px-3 py-2 bg-muted border border-border rounded-md text-sm text-muted-foreground w-full">
+          <span className="font-semibold text-foreground">Country:</span> United States of America (USA)
+          <span className="ml-auto text-xs text-muted-foreground font-medium uppercase tracking-wider">F1 Visa</span>
         </div>
       </div>
 
@@ -33,7 +33,7 @@ const FormContainer = ({ handleInputChange, GoToNext }) => {
 
       <div className="mt-4 flex justify-end">
         <button
-          className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors cursor-pointer"
+          className="bg-foreground text-background px-4 py-2 rounded-md hover:opacity-90 transition-colors cursor-pointer"
           onClick={() => {
             handleInputChange('country', 'USA');
             GoToNext();

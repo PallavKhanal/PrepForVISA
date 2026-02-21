@@ -19,10 +19,10 @@ export default function DonateUsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-white text-black flex flex-col">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
 
       {/* HEADER */}
-      <header className="border-b border-black">
+      <header className="border-b border-border">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <Image src="/Logo.png" alt="Logo" width={42} height={42} />
@@ -30,7 +30,7 @@ export default function DonateUsPage() {
           </div>
           <Button
             variant="outline"
-            className="border-black text-black hover:bg-black hover:text-white"
+            className="border-border text-foreground hover:bg-foreground hover:text-background"
             asChild
           >
             <a href="/">Back Home</a>
@@ -43,7 +43,7 @@ export default function DonateUsPage() {
         <h1 className="text-4xl md:text-5xl font-bold leading-tight">
           Support the Mission.
         </h1>
-        <p className="mt-4 text-lg text-black/70 max-w-xl">
+        <p className="mt-4 text-lg text-muted-foreground max-w-xl">
           Your support powers real-time visa interview simulations and keeps access
           fair for students worldwide.
         </p>
@@ -55,29 +55,29 @@ export default function DonateUsPage() {
       <section className="max-w-5xl mx-auto px-6 py-14 grid grid-cols-1 md:grid-cols-2 gap-10">
 
         {/* CARD / BANK CHECKOUT (Future Stripe Ready) */}
-        <Card className="border-black">
+        <Card className="border-border">
           <CardHeader>
             <CardTitle>Card / Bank Checkout</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <Label>Amount (USD)</Label>
-              <Input type="number" placeholder="25" className="border-black" />
+              <Input type="number" placeholder="25" className="border-border" />
             </div>
 
             <div className="space-y-2">
               <Label>Email for Receipt (optional)</Label>
-              <Input type="email" placeholder="you@example.com" className="border-black" />
+              <Input type="email" placeholder="you@example.com" className="border-border" />
             </div>
 
-            <Button className="w-full bg-black text-white hover:bg-black/80">
+            <Button className="w-full bg-foreground text-background hover:opacity-90">
               Continue to Secure Checkout
             </Button>
           </CardContent>
         </Card>
 
         {/* QR DONATION BLOCKS */}
-        <Card className="border-black">
+        <Card className="border-border">
           <CardHeader>
             <CardTitle>Scan to Donate</CardTitle>
           </CardHeader>
@@ -86,7 +86,7 @@ export default function DonateUsPage() {
             {/* eSewa */}
             <div>
               <div className="text-sm mb-2 font-medium">eSewa (Nepal)</div>
-              <div className="relative w-full aspect-square border border-black overflow-hidden rounded-lg">
+              <div className="relative w-full aspect-square border border-border overflow-hidden rounded-lg">
                 <Image src="/qr-esewa.png" alt="eSewa QR" fill className="object-contain p-4" />
               </div>
             </div>
@@ -94,7 +94,7 @@ export default function DonateUsPage() {
             {/* Zelle */}
             <div>
               <div className="text-sm mb-2 font-medium">Zelle (USA Bank Accounts)</div>
-              <div className="relative w-full aspect-square border border-black overflow-hidden rounded-lg">
+              <div className="relative w-full aspect-square border border-border overflow-hidden rounded-lg">
                 <Image src="/qr-zelle.png" alt="Zelle QR" fill className="object-contain p-4" />
               </div>
             </div>
@@ -102,13 +102,13 @@ export default function DonateUsPage() {
             {/* Global IME */}
             <div>
               <div className="text-sm mb-2 font-medium">Global IME Bank (Direct Transfer)</div>
-              <div className="relative w-full aspect-square border border-black overflow-hidden rounded-lg">
+              <div className="relative w-full aspect-square border border-border overflow-hidden rounded-lg">
                 <Image src="/qr-globalime.png" alt="Global IME Bank QR" fill className="object-contain p-4" />
               </div>
 
               <Button
                 variant="outline"
-                className="mt-3 border-black w-full flex items-center justify-center gap-2"
+                className="mt-3 border-border w-full flex items-center justify-center gap-2"
                 onClick={() => copy("GLOBAL_IME_BANK_ACCOUNT_NUMBER_HERE")}
               >
                 {copied ? (
@@ -130,7 +130,7 @@ export default function DonateUsPage() {
       <Separator />
 
       {/* CONTACT */}
-      <footer className="max-w-5xl mx-auto px-6 py-12 text-center text-sm text-black/70">
+      <footer className="max-w-5xl mx-auto px-6 py-12 text-center text-sm text-muted-foreground">
         For any questions, call <span className="font-semibold">(945)-371-4696</span> or email{" "}
         <a href="mailto:pallav.formal@gmail.com" className="underline">
           pallav.formal@gmail.com

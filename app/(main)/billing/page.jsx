@@ -110,12 +110,12 @@ export default function BillingPage() {
   if (loading) {
     return (
       <div className="h-full p-6 flex flex-col gap-5 animate-pulse">
-        <div className="h-6 w-32 bg-neutral-100 rounded-lg" />
-        <div className="h-20 bg-neutral-100 rounded-2xl" />
+        <div className="h-6 w-32 bg-muted rounded-lg" />
+        <div className="h-20 bg-muted rounded-2xl" />
         <div className="flex-1 grid grid-cols-3 gap-4">
-          {[0, 1, 2].map((i) => <div key={i} className="bg-neutral-100 rounded-2xl" />)}
+          {[0, 1, 2].map((i) => <div key={i} className="bg-muted rounded-2xl" />)}
         </div>
-        <div className="h-10 bg-neutral-100 rounded-xl" />
+        <div className="h-10 bg-muted rounded-xl" />
       </div>
     );
   }
@@ -128,7 +128,7 @@ export default function BillingPage() {
     <div className="relative h-full">
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(rgba(0,0,0,0.06)_1px,transparent_1px)] [background-size:16px_16px]"
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(rgba(0,0,0,0.06)_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:16px_16px]"
       />
 
       <div className="flex flex-col gap-5 h-full p-6">
@@ -136,15 +136,15 @@ export default function BillingPage() {
         {/* Header */}
         <div className="shrink-0 flex items-center justify-between">
           <div>
-            <h1 className="text-xl font-bold tracking-tight text-[#0a0a0a]">Billing</h1>
-            <p className="text-xs text-neutral-500 mt-0.5">Manage your plan and track your usage.</p>
+            <h1 className="text-xl font-bold tracking-tight text-foreground">Billing</h1>
+            <p className="text-xs text-muted-foreground mt-0.5">Manage your plan and track your usage.</p>
           </div>
           <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full border text-[11px] font-bold uppercase tracking-widest ${
             currentPlan === "max"
-              ? "bg-[#0a0a0a] text-white border-[#0a0a0a]"
+              ? "bg-foreground text-background border-foreground"
               : currentPlan === "pro"
-              ? "bg-neutral-800 text-white border-neutral-800"
-              : "bg-neutral-100 text-neutral-600 border-neutral-200"
+              ? "bg-foreground/90 text-background border-foreground/90"
+              : "bg-muted text-muted-foreground border-border"
           }`}>
             <plan.icon className="w-3 h-3" />
             {plan.name} Plan
@@ -184,9 +184,9 @@ export default function BillingPage() {
         </div>
 
         {/* Beta note */}
-        <div className="shrink-0 rounded-xl border border-dashed border-neutral-300 bg-white/50 px-4 py-3 flex items-center gap-3 backdrop-blur">
+        <div className="shrink-0 rounded-xl border border-dashed border-border bg-background/50 px-4 py-3 flex items-center gap-3 backdrop-blur">
           <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
-          <p className="text-[12px] text-neutral-500">
+          <p className="text-[12px] text-muted-foreground">
             Payments are coming soon. Plan upgrades are free during the beta period — enjoy full access while it lasts.
           </p>
         </div>
@@ -202,24 +202,24 @@ function UsageStat({ icon: Icon, label, used, total, remaining }) {
   const isFull = pct >= 100;
 
   return (
-    <div className="rounded-xl border bg-white/70 backdrop-blur px-6 py-5 flex items-center gap-5">
-      <div className="w-11 h-11 rounded-xl bg-neutral-100 flex items-center justify-center shrink-0">
-        <Icon className="w-5 h-5 text-neutral-600" />
+    <div className="rounded-xl border border-border bg-background/70 backdrop-blur px-6 py-5 flex items-center gap-5">
+      <div className="w-11 h-11 rounded-xl bg-muted flex items-center justify-center shrink-0">
+        <Icon className="w-5 h-5 text-muted-foreground" />
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm text-neutral-500 truncate">{label}</span>
-          <span className={`text-sm font-bold ml-2 shrink-0 ${isFull ? "text-red-500" : "text-[#0a0a0a]"}`}>
+          <span className="text-sm text-muted-foreground truncate">{label}</span>
+          <span className={`text-sm font-bold ml-2 shrink-0 ${isFull ? "text-red-500" : "text-foreground"}`}>
             {remaining} / {total}
           </span>
         </div>
-        <div className="h-2 w-full rounded-full bg-neutral-100 overflow-hidden">
+        <div className="h-2 w-full rounded-full bg-muted overflow-hidden">
           <div
-            className={`h-full rounded-full transition-all duration-500 ${isFull ? "bg-red-400" : "bg-[#0a0a0a]"}`}
+            className={`h-full rounded-full transition-all duration-500 ${isFull ? "bg-red-400" : "bg-foreground"}`}
             style={{ width: `${pct}%` }}
           />
         </div>
-        <p className={`mt-1.5 text-[12px] font-medium ${isFull ? "text-red-500" : "text-neutral-400"}`}>
+        <p className={`mt-1.5 text-[12px] font-medium ${isFull ? "text-red-500" : "text-muted-foreground"}`}>
           {isFull ? "Limit reached — upgrade to continue" : `${remaining} remaining`}
         </p>
       </div>
@@ -236,39 +236,39 @@ function PlanCard({ plan, isCurrent, isUpgrading, onSelect, currentPlanKey }) {
   return (
     <div className={`flex flex-col rounded-2xl border p-6 transition-all duration-200 overflow-hidden ${
       isCurrent
-        ? "border-[#0a0a0a] bg-[#0a0a0a] text-white shadow-lg"
-        : "border-neutral-200 bg-white/70 backdrop-blur hover:border-neutral-400 hover:shadow-md"
+        ? "border-foreground bg-foreground text-background shadow-lg"
+        : "border-border bg-background/70 backdrop-blur hover:border-input hover:shadow-md"
     }`}>
 
       {/* Top badge row */}
       <div className="flex items-center justify-between mb-5">
         <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
-          isCurrent ? "bg-white/10" : "bg-neutral-100"
+          isCurrent ? "bg-background/10" : "bg-muted"
         }`}>
-          <Icon className={`w-4 h-4 ${isCurrent ? "text-white" : "text-neutral-700"}`} />
+          <Icon className={`w-4 h-4 ${isCurrent ? "text-background" : "text-muted-foreground"}`} />
         </div>
         {isCurrent && (
-          <span className="text-[10px] font-bold uppercase tracking-widest bg-white/15 text-white px-2.5 py-1 rounded-full">
+          <span className="text-[10px] font-bold uppercase tracking-widest bg-background/15 text-background px-2.5 py-1 rounded-full">
             Active
           </span>
         )}
         {isMax && !isCurrent && (
-          <span className="text-[10px] font-bold uppercase tracking-widest bg-[#0a0a0a] text-white px-2.5 py-1 rounded-full">
+          <span className="text-[10px] font-bold uppercase tracking-widest bg-foreground text-background px-2.5 py-1 rounded-full">
             Popular
           </span>
         )}
       </div>
 
       {/* Name + price */}
-      <p className={`text-[11px] font-semibold uppercase tracking-widest mb-1 ${isCurrent ? "text-white/50" : "text-neutral-400"}`}>
+      <p className={`text-[11px] font-semibold uppercase tracking-widest mb-1 ${isCurrent ? "text-background/50" : "text-muted-foreground"}`}>
         {plan.name}
       </p>
       <div className="flex items-end gap-1 mb-1">
-        <span className={`text-3xl font-bold leading-none ${isCurrent ? "text-white" : "text-[#0a0a0a]"}`}>
+        <span className={`text-3xl font-bold leading-none ${isCurrent ? "text-background" : "text-foreground"}`}>
           {plan.priceLabel}
         </span>
       </div>
-      <p className={`text-[12px] mb-5 ${isCurrent ? "text-white/50" : "text-neutral-400"}`}>
+      <p className={`text-[12px] mb-5 ${isCurrent ? "text-background/50" : "text-muted-foreground"}`}>
         {plan.tagline}
       </p>
 
@@ -276,8 +276,8 @@ function PlanCard({ plan, isCurrent, isUpgrading, onSelect, currentPlanKey }) {
       <ul className="space-y-2 flex-1">
         {plan.features.map((f) => (
           <li key={f} className="flex items-start gap-2 text-[13px]">
-            <Check className={`mt-0.5 w-3.5 h-3.5 shrink-0 ${isCurrent ? "text-white/60" : "text-neutral-400"}`} />
-            <span className={isCurrent ? "text-white/80" : "text-neutral-700"}>{f}</span>
+            <Check className={`mt-0.5 w-3.5 h-3.5 shrink-0 ${isCurrent ? "text-background/60" : "text-muted-foreground"}`} />
+            <span className={isCurrent ? "text-background/80" : "text-foreground/80"}>{f}</span>
           </li>
         ))}
       </ul>
@@ -288,10 +288,10 @@ function PlanCard({ plan, isCurrent, isUpgrading, onSelect, currentPlanKey }) {
         disabled={isCurrent || !!isUpgrading}
         className={`mt-5 w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all duration-150 ${
           isCurrent
-            ? "bg-white/10 text-white/40 cursor-default"
+            ? "bg-background/10 text-background/40 cursor-default"
             : isDowngrade
-            ? "border border-neutral-200 text-neutral-400 hover:border-neutral-300 hover:text-neutral-600"
-            : "bg-[#0a0a0a] text-white hover:bg-neutral-800 active:scale-[0.98]"
+            ? "border border-border text-muted-foreground hover:border-input hover:text-foreground"
+            : "bg-foreground text-background hover:opacity-90 active:scale-[0.98]"
         }`}
       >
         {isUpgrading ? (

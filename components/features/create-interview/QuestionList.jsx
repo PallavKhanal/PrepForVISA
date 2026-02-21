@@ -58,9 +58,9 @@ const QuestionList = ({ formData }) => {
     <div className="p-5">
       {loading ? (
         <div className="flex flex-col items-center justify-center text-center mt-10">
-          <Loader2Icon className="animate-spin w-8 h-8 mb-3 text-gray-700" />
+          <Loader2Icon className="animate-spin w-8 h-8 mb-3 text-foreground/80" />
           <h2 className="font-semibold text-lg">Generating Interview Questions</h2>
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             Our AI is crafting personalized questions tailored to your profile.
           </p>
         </div>
@@ -75,7 +75,7 @@ const QuestionList = ({ formData }) => {
               <div className="mt-6 flex justify-end">
                 <button
                   onClick={() => router.push("/previous-interviews")}
-                  className="inline-flex items-center gap-2 bg-[#0a0a0a] text-white text-sm font-medium px-5 py-2.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150"
+                  className="inline-flex items-center gap-2 bg-foreground text-background text-sm font-medium px-5 py-2.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150"
                 >
                   View in History
                   <ArrowRight className="w-4 h-4" />
@@ -83,7 +83,7 @@ const QuestionList = ({ formData }) => {
               </div>
             </>
           ) : (
-            <p className="text-gray-500 italic">
+            <p className="text-muted-foreground italic">
               No questions found. Try again or check your API connection.
             </p>
           )}

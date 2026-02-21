@@ -26,8 +26,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-50">
-      <div className="flex flex-col justify-center items-center border-2 border-gray rounded-2xl p-8 bg-white shadow-md">
+    <div className="flex justify-center items-center h-screen bg-muted">
+      <div className="flex flex-col justify-center items-center border-2 border-border rounded-2xl p-8 bg-background shadow-md">
 
         <div>
           <Image

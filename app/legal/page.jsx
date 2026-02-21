@@ -17,7 +17,7 @@ export default function LegalPage() {
       {/* Background grid */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(rgba(0,0,0,0.06)_1px,transparent_1px)] [background-size:16px_16px]"
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(rgba(0,0,0,0.06)_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:16px_16px]"
       />
 
       <div className="mx-auto max-w-3xl px-6 py-12 lg:px-8 lg:py-16">
@@ -25,7 +25,7 @@ export default function LegalPage() {
         {/* Back link */}
         <Link
           href="/"
-          className="mb-8 inline-flex items-center gap-1.5 text-xs text-neutral-500 hover:text-black transition-colors"
+          className="mb-8 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
           Back to home
@@ -33,26 +33,26 @@ export default function LegalPage() {
 
         {/* Page header */}
         <div className="mb-8">
-          <div className="mb-3 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs tracking-wide text-neutral-600">
+          <div className="mb-3 inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs tracking-wide text-muted-foreground">
             <Shield className="h-3.5 w-3.5" />
             PrepForVISA
           </div>
           <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">Support & Legal</h1>
-          <p className="mt-3 text-[15px] leading-7 text-neutral-600">
+          <p className="mt-3 text-[15px] leading-7 text-muted-foreground">
             Contact us, read our privacy policy, or review our terms of service.
           </p>
         </div>
 
         {/* Tab bar */}
-        <div className="mb-8 flex gap-1 rounded-xl border bg-white/70 p-1 shadow-sm backdrop-blur">
+        <div className="mb-8 flex gap-1 rounded-xl border border-border bg-background/70 p-1 shadow-sm backdrop-blur">
           {TABS.map(({ label, icon: Icon }, i) => (
             <button
               key={label}
               onClick={() => setActive(i)}
               className={`flex flex-1 items-center justify-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 ${
                 active === i
-                  ? "bg-black text-white shadow-sm"
-                  : "text-neutral-500 hover:text-black"
+                  ? "bg-foreground text-background shadow-sm"
+                  : "text-muted-foreground hover:text-foreground"
               }`}
             >
               <Icon className="h-3.5 w-3.5" />
@@ -76,25 +76,25 @@ export default function LegalPage() {
 function ContactPage() {
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
+      <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
         <h2 className="text-2xl font-semibold tracking-tight">Get in Touch</h2>
-        <p className="mt-3 text-[15px] leading-7 text-neutral-700">
+        <p className="mt-3 text-[15px] leading-7 text-foreground/80">
           A real person reads every message. Whether you have a billing issue, a bug to report, or
           need your account deleted — email us and we will get back to you within two business days.
         </p>
 
         {/* Email card */}
-        <div className="mt-6 flex items-center gap-4 rounded-xl border bg-neutral-50 p-5">
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-black">
-            <Mail className="h-5 w-5 text-white" />
+        <div className="mt-6 flex items-center gap-4 rounded-xl border border-border bg-muted p-5">
+          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-foreground">
+            <Mail className="h-5 w-5 text-background" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-400">Primary support email</p>
-            <p className="text-[15px] font-semibold text-neutral-900 truncate">prepforvisainterview@gmail.com</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Primary support email</p>
+            <p className="text-[15px] font-semibold text-foreground truncate">prepforvisainterview@gmail.com</p>
           </div>
           <a
             href="mailto:prepforvisainterview@gmail.com?subject=PrepForVISA%20Support"
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-black px-4 py-2 text-sm font-medium text-white hover:bg-neutral-800 transition-colors"
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-foreground px-4 py-2 text-sm font-medium text-background hover:opacity-90 transition-colors"
           >
             Send email
             <ExternalLink className="h-3.5 w-3.5 opacity-70" />
@@ -103,9 +103,9 @@ function ContactPage() {
       </section>
 
       {/* Quick actions */}
-      <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
+      <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
         <h2 className="text-xl font-semibold tracking-tight">Common Requests</h2>
-        <p className="mt-2 text-[14.5px] leading-7 text-neutral-600">
+        <p className="mt-2 text-[14.5px] leading-7 text-muted-foreground">
           Click a topic to open your email app with the subject pre-filled.
         </p>
         <div className="mt-5 grid gap-3 sm:grid-cols-3">
@@ -129,21 +129,21 @@ function ContactPage() {
             <a
               key={label}
               href={`mailto:prepforvisainterview@gmail.com?subject=${subject}`}
-              className="group rounded-xl border bg-white/70 p-4 backdrop-blur hover:border-neutral-400 hover:shadow-sm transition-all"
+              className="group rounded-xl border border-border bg-background/70 p-4 backdrop-blur hover:border-input hover:shadow-sm transition-all"
             >
-              <p className="text-[14px] font-semibold text-neutral-900 group-hover:underline">{label}</p>
-              <p className="mt-1 text-[13px] leading-6 text-neutral-500">{desc}</p>
+              <p className="text-[14px] font-semibold text-foreground group-hover:underline">{label}</p>
+              <p className="mt-1 text-[13px] leading-6 text-muted-foreground">{desc}</p>
             </a>
           ))}
         </div>
       </section>
 
-      <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
+      <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
         <div className="flex items-start gap-3">
-          <Info className="mt-0.5 h-5 w-5 shrink-0 text-neutral-500" />
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
           <div>
             <h3 className="text-[15px] font-semibold">Privacy & data requests</h3>
-            <p className="mt-1 text-[14.5px] leading-7 text-neutral-700">
+            <p className="mt-1 text-[14.5px] leading-7 text-foreground/80">
               For account deletion or data access requests, include the email address linked to
               your account so we can locate your records. We process all data requests within 7
               business days.
@@ -160,10 +160,10 @@ function ContactPage() {
 function PrivacyPage() {
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
-        <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-neutral-400">Privacy Policy</div>
+      <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
+        <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Privacy Policy</div>
         <h2 className="text-2xl font-semibold tracking-tight">How We Handle Your Data</h2>
-        <p className="mt-3 text-[15px] leading-7 text-neutral-700">
+        <p className="mt-3 text-[15px] leading-7 text-foreground/80">
           Last updated: <strong>February 2026</strong>. We collect only what is necessary to run
           the service, we never sell your data, and you can request deletion at any time.
         </p>
@@ -233,9 +233,9 @@ function PrivacyPage() {
             { name: "OpenRouter / Mistral", role: "Generates interview questions from the description you provide." },
             { name: "Stripe", role: "Handles all payment processing. We never store your card details." },
           ].map(({ name, role }) => (
-            <div key={name} className="rounded-xl border p-4">
-              <p className="text-[14px] font-semibold text-neutral-900">{name}</p>
-              <p className="mt-1 text-[13.5px] leading-6 text-neutral-600">{role}</p>
+            <div key={name} className="rounded-xl border border-border p-4">
+              <p className="text-[14px] font-semibold text-foreground">{name}</p>
+              <p className="mt-1 text-[13.5px] leading-6 text-muted-foreground">{role}</p>
             </div>
           ))}
         </div>
@@ -251,12 +251,12 @@ function PrivacyPage() {
         />
       </DocSection>
 
-      <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
+      <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
         <div className="flex items-start gap-3">
-          <Info className="mt-0.5 h-5 w-5 shrink-0 text-neutral-500" />
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
           <div>
             <h3 className="text-[15px] font-semibold">Cookies & Policy Updates</h3>
-            <p className="mt-1 text-[14.5px] leading-7 text-neutral-700">
+            <p className="mt-1 text-[14.5px] leading-7 text-foreground/80">
               We use session cookies only to keep you signed in. No advertising or third-party
               tracking cookies are used. We may update this Privacy Policy from time to time — the
               date above will reflect any changes. Continued use of PrepForVISA after an update
@@ -274,18 +274,18 @@ function PrivacyPage() {
 function TermsPage() {
   return (
     <div className="space-y-6">
-      <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
-        <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-neutral-400">Terms of Service</div>
+      <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
+        <div className="mb-1 text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">Terms of Service</div>
         <h2 className="text-2xl font-semibold tracking-tight">Rules Governing Your Use</h2>
-        <p className="mt-3 text-[15px] leading-7 text-neutral-700">
+        <p className="mt-3 text-[15px] leading-7 text-foreground/80">
           Last updated: <strong>February 2026</strong>. By accessing or using PrepForVISA, you
           agree to be bound by these Terms. If you do not agree, please do not use the platform.
         </p>
 
         {/* Disclaimer */}
-        <div className="mt-6 rounded-xl border border-neutral-300 bg-neutral-50 p-5">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-neutral-500 mb-2">Important disclaimer</p>
-          <p className="text-[14.5px] leading-7 font-medium text-neutral-900">
+        <div className="mt-6 rounded-xl border border-border bg-muted p-5">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground mb-2">Important disclaimer</p>
+          <p className="text-[14.5px] leading-7 font-medium text-foreground">
             PrepForVISA is a practice tool only. We make no representation, warranty, or guarantee
             that using this platform will result in a successful visa interview or visa approval.
             Visa decisions are made solely by U.S. consular officers. We are not affiliated with
@@ -371,12 +371,12 @@ function TermsPage() {
         </DocSection>
       </div>
 
-      <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
+      <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
         <div className="flex items-start gap-3">
-          <Info className="mt-0.5 h-5 w-5 shrink-0 text-neutral-500" />
+          <Info className="mt-0.5 h-5 w-5 shrink-0 text-muted-foreground" />
           <div>
             <h3 className="text-[15px] font-semibold">Changes to These Terms</h3>
-            <p className="mt-1 text-[14.5px] leading-7 text-neutral-700">
+            <p className="mt-1 text-[14.5px] leading-7 text-foreground/80">
               We may update these Terms from time to time. The date at the top of this page will
               reflect any changes. Continued use of PrepForVISA after an update constitutes your
               acceptance of the revised Terms. Questions? Email{" "}
@@ -396,18 +396,18 @@ function TermsPage() {
 
 function DocSection({ title, children }) {
   return (
-    <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
-      <h2 className="text-[17px] font-semibold tracking-tight text-neutral-900">{title}</h2>
-      <div className="mt-3 text-[15px] leading-7 text-neutral-700 space-y-3">{children}</div>
+    <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
+      <h2 className="text-[17px] font-semibold tracking-tight text-foreground">{title}</h2>
+      <div className="mt-3 text-[15px] leading-7 text-foreground/80 space-y-3">{children}</div>
     </section>
   );
 }
 
 function Stat({ label, value }) {
   return (
-    <div className="rounded-xl border px-4 py-3">
-      <div className="text-[11px] uppercase tracking-wider text-neutral-500">{label}</div>
-      <div className="text-base font-semibold text-neutral-900">{value}</div>
+    <div className="rounded-xl border border-border px-4 py-3">
+      <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
+      <div className="text-base font-semibold text-foreground">{value}</div>
     </div>
   );
 }
@@ -416,8 +416,8 @@ function CheckList({ items }) {
   return (
     <ul className="space-y-2">
       {items.map(({ label, detail }, i) => (
-        <li key={i} className="flex items-start gap-2.5 text-[15px] leading-7 text-neutral-800">
-          <Check className="mt-1 h-4 w-4 shrink-0 text-neutral-500" />
+        <li key={i} className="flex items-start gap-2.5 text-[15px] leading-7 text-foreground/80">
+          <Check className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />
           <span>{label ? <><strong>{label}:</strong> {detail}</> : detail}</span>
         </li>
       ))}

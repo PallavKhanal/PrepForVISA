@@ -7,15 +7,15 @@ export default function OurAdvisePage() {
       {/* Subtle background grid */}
       <div
         aria-hidden
-        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(rgba(0,0,0,0.06)_1px,transparent_1px)] [background-size:16px_16px]"
+        className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(rgba(0,0,0,0.06)_1px,transparent_1px)] dark:bg-[radial-gradient(rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:16px_16px]"
       />
 
       <div className="mx-auto grid max-w-6xl grid-cols-1 gap-10 px-6 py-12 lg:grid-cols-[1fr_280px] lg:gap-16 lg:px-8 lg:py-16">
         {/* Main */}
         <main className="space-y-10">
           {/* Hero / Intro */}
-          <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
-            <div className="mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs tracking-wide text-neutral-600">
+          <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
+            <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-border px-3 py-1 text-xs tracking-wide text-muted-foreground">
               <Shield className="h-3.5 w-3.5" />
               F-1 Interview Preparation
             </div>
@@ -24,8 +24,8 @@ export default function OurAdvisePage() {
               Our Advise to F-1 Visa Applicants
             </h1>
 
-            <p className="mt-4 max-w-3xl text-[15px] leading-7 text-neutral-700">
-              This page is designed to feel like a one-to-one mentor session. You’ll find what to
+            <p className="mt-4 max-w-3xl text-[15px] leading-7 text-foreground/80">
+              This page is designed to feel like a one-to-one mentor session. You'll find what to
               say, how to say it, and how to present your finances and intent with complete clarity.
               Keep your answers short, factual, and personal. Confidence comes from preparation, not
               memorization.
@@ -49,7 +49,7 @@ export default function OurAdvisePage() {
             <Card title="Answer Frame">
               <Bullets
                 items={[
-                  "Who you are and what you’ve done so far.",
+                  "Who you are and what you've done so far.",
                   "Why this major is a logical next step.",
                   "Why this specific university (curriculum, labs, location, cost).",
                   "How the program connects to a role you can actually pursue at home.",
@@ -125,7 +125,7 @@ We are not relying on income in the U.S. to fund my studies.`}
 
             <Card title="One-Line Tie">
               <Mono>
-                {`My plan requires U.S. training in [specific area], then I’m returning to [home city]
+                {`My plan requires U.S. training in [specific area], then I'm returning to [home city]
 to work as [role] where these skills are in demand.`}
               </Mono>
             </Card>
@@ -140,7 +140,7 @@ to work as [role] where these skills are in demand.`}
                     "Stand straight, be still, maintain natural eye contact.",
                     "Keep answers 1–2 sentences; stop when finished.",
                     "If unclear, ask to repeat once, then answer.",
-                    'If you don’t know, say “I will verify that.”',
+                    "If you don't know, say \"I will verify that.\"",
                   ]}
                 />
               </Card>
@@ -148,7 +148,7 @@ to work as [role] where these skills are in demand.`}
                 <Mono>
                   {`Explain your choice of university in 15 seconds.
 Mention 2 specific program features and 1 career link.
-Stop talking once you’ve answered.`}
+Stop talking once you've answered.`}
                 </Mono>
               </Card>
             </div>
@@ -156,7 +156,7 @@ Stop talking once you’ve answered.`}
 
           {/* Core Script */}
           <Section id="script" title="Core Interview Track (90 Seconds)">
-            <ol className="list-decimal space-y-3 pl-6 text-[15px] leading-7 text-neutral-800">
+            <ol className="list-decimal space-y-3 pl-6 text-[15px] leading-7 text-foreground">
               <li>Who you are and recent background.</li>
               <li>Why this major now, in one sentence.</li>
               <li>Why this university, with two concrete academic reasons.</li>
@@ -176,18 +176,18 @@ and the capstone aligns with the tools used by [industry in home country]."
               <Example
                 q="How will you fund your studies?"
                 a="My mother, a senior accountant at [company] for 12 years, sponsors me.
-Annual income is about [amount]. We’ve allocated [amount] for Year 1 and I have a
-[amount] scholarship. We’re not relying on U.S. income."
+Annual income is about [amount]. We've allocated [amount] for Year 1 and I have a
+[amount] scholarship. We're not relying on U.S. income."
               />
               <Example
                 q="What after graduation?"
-                a="Return to [home country] for a [role] at [type of company], where this program’s
+                a="Return to [home country] for a [role] at [type of company], where this program's
 tools are standard. My goal is to build expertise and lead projects in [area]."
               />
               <Example
                 q="Do you plan to work in the U.S.?"
                 a="My purpose is education. If the program offers authorized practical training,
-I’ll use it to gain project exposure, then return to [home country] for my role."
+I'll use it to gain project exposure, then return to [home country] for my role."
               />
             </div>
           </Section>
@@ -219,16 +219,16 @@ I’ll use it to gain project exposure, then return to [home country] for my rol
           </Section>
 
           {/* Closing */}
-          <section className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
+          <section className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
             <div className="flex items-start gap-3">
-              <Info className="mt-1 h-5 w-5 text-neutral-700" />
+              <Info className="mt-1 h-5 w-5 text-foreground/70" />
               <div>
                 <h3 className="text-xl font-semibold tracking-tight">Final Guidance</h3>
-                <p className="mt-2 text-[15px] leading-7 text-neutral-700">
+                <p className="mt-2 text-[15px] leading-7 text-foreground/80">
                   Speak like a person who has already made a sound decision. Be brief, factual, and
                   consistent with your documents. Confidence comes from clarity and practice.
                 </p>
-                <div className="mt-4 inline-flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
+                <div className="mt-4 inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm">
                   <ArrowRight className="h-4 w-4" />
                   Rehearse your three core answers: university, finances, and post-graduation plan.
                 </div>
@@ -239,7 +239,7 @@ I’ll use it to gain project exposure, then return to [home country] for my rol
 
         {/* Sidebar / TOC */}
         <aside className="top-20 hidden h-max lg:sticky lg:block">
-          <nav className="rounded-xl border bg-white/70 p-5 text-sm shadow-sm backdrop-blur">
+          <nav className="rounded-xl border border-border bg-background/70 p-5 text-sm shadow-sm backdrop-blur">
             <div className="mb-3 flex items-center gap-2 font-medium">
               <FileText className="h-4 w-4" />
               On this page
@@ -264,9 +264,9 @@ I’ll use it to gain project exposure, then return to [home country] for my rol
 
 function Section({ id, title, children }) {
   return (
-    <section id={id} className="rounded-2xl border bg-white/70 p-8 shadow-sm backdrop-blur">
+    <section id={id} className="rounded-2xl border border-border bg-background/70 p-8 shadow-sm backdrop-blur">
       <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
-      <div className="prose mt-3 max-w-none prose-p:my-0 prose-ul:my-0 prose-li:my-0 prose-li:marker:text-neutral-400">
+      <div className="prose dark:prose-invert mt-3 max-w-none prose-p:my-0 prose-ul:my-0 prose-li:my-0 prose-li:marker:text-muted-foreground">
         {children}
       </div>
     </section>
@@ -275,18 +275,18 @@ function Section({ id, title, children }) {
 
 function Card({ title, children }) {
   return (
-    <div className="rounded-xl border p-5">
+    <div className="rounded-xl border border-border p-5">
       {title ? <h3 className="mb-2 text-[15px] font-semibold tracking-tight">{title}</h3> : null}
-      <div className="text-[15px] leading-7 text-neutral-800">{children}</div>
+      <div className="text-[15px] leading-7 text-foreground">{children}</div>
     </div>
   );
 }
 
 function MiniCard({ title, items }) {
   return (
-    <div className="rounded-xl border p-5">
+    <div className="rounded-xl border border-border p-5">
       <div className="text-sm font-semibold">{title}</div>
-      <ul className="mt-2 list-disc pl-5 text-[14.5px] leading-7 text-neutral-800">
+      <ul className="mt-2 list-disc pl-5 text-[14.5px] leading-7 text-foreground/80">
         {items.map((i) => (
           <li key={i}>{i}</li>
         ))}
@@ -297,8 +297,8 @@ function MiniCard({ title, items }) {
 
 function Stat({ label, value }) {
   return (
-    <div className="rounded-xl border px-4 py-3">
-      <div className="text-[11px] uppercase tracking-wider text-neutral-500">{label}</div>
+    <div className="rounded-xl border border-border px-4 py-3">
+      <div className="text-[11px] uppercase tracking-wider text-muted-foreground">{label}</div>
       <div className="text-lg font-semibold">{value}</div>
     </div>
   );
@@ -306,7 +306,7 @@ function Stat({ label, value }) {
 
 function Bullets({ items }) {
   return (
-    <ul className="list-disc pl-5 text-[15px] leading-7 text-neutral-800">
+    <ul className="list-disc pl-5 text-[15px] leading-7 text-foreground/80">
       {items.map((i) => (
         <li key={i}>{i}</li>
       ))}
@@ -342,10 +342,10 @@ function Crosslist({ items }) {
 
 function Example({ q, a }) {
   return (
-    <div className="rounded-xl border p-5">
-      <div className="text-[13px] font-semibold uppercase tracking-wide text-neutral-500">Example</div>
+    <div className="rounded-xl border border-border p-5">
+      <div className="text-[13px] font-semibold uppercase tracking-wide text-muted-foreground">Example</div>
       <div className="mt-1 text-[15px] font-medium">Q: {q}</div>
-      <pre className="mt-2 whitespace-pre-wrap rounded-md border bg-neutral-50 p-3 text-[14px] leading-7">
+      <pre className="mt-2 whitespace-pre-wrap rounded-md border border-border bg-muted p-3 text-[14px] leading-7">
         {`A: ${a}`}
       </pre>
     </div>
@@ -354,7 +354,7 @@ function Example({ q, a }) {
 
 function Mono({ children }) {
   return (
-    <pre className="whitespace-pre-wrap rounded-md border bg-neutral-50 p-3 text-[14px] leading-7">
+    <pre className="whitespace-pre-wrap rounded-md border border-border bg-muted p-3 text-[14px] leading-7">
       {children}
     </pre>
   );
@@ -365,7 +365,7 @@ function TocLink({ href, label }) {
     <li>
       <a
         href={href}
-        className="block rounded-md px-2 py-1.5 text-neutral-700 transition hover:bg-neutral-100"
+        className="block rounded-md px-2 py-1.5 text-foreground/80 transition hover:bg-accent"
       >
         {label}
       </a>

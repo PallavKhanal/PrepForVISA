@@ -7,7 +7,7 @@ const QuestionListContainer = ({ questionList }) => {
         {questionList.map((q, i) => (
           <li
             key={i}
-            className="border border-gray-300 rounded-lg p-3 hover:bg-gray-50 transition"
+            className="border border-border rounded-lg p-3 hover:bg-accent transition"
           >
             {i + 1}. {q}
           </li>
