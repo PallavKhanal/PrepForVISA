@@ -1,18 +1,18 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Loader2Icon } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Loader2Icon, ArrowRight } from "lucide-react";
 import QuestionListContainer from "./QuestionListContainer";
 import supabase from "@/lib/supabase";
 import { useUser } from "@/app/Provider";
 import { v4 as uuidv4 } from "uuid";
+import { useRouter } from "next/navigation";
 
 const QuestionList = ({ formData }) => {
   const [loading, setLoading] = useState(false);
   const [questionList, setQuestionList] = useState([]);
   const { user } = useUser();
-  const [saving, setSaving] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (formData?.country && formData?.description && formData?.duration) {
@@ -29,47 +29,30 @@ const QuestionList = ({ formData }) => {
       try {
         parsedData = JSON.parse(result.data.result);
       } catch (err) {
-        console.error(" Failed to parse response:", err);
+        console.error("Failed to parse response:", err);
         parsedData = { interviewQuestions: [] };
       }
 
-      setQuestionList(parsedData.interviewQuestions || []);
+      const questions = parsedData.interviewQuestions || [];
+      setQuestionList(questions);
+
+      // Auto-save immediately after generation
+      if (questions.length > 0 && user?.email) {
+        await supabase.from("Interviews").insert([{
+          country: formData.country,
+          description: formData.description,
+          duration: formData.duration,
+          questions: questions,
+          user_email: user.email,
+          interview_id: uuidv4(),
+        }]);
+      }
     } catch (e) {
       console.error("Error generating questions:", e);
       setQuestionList([]);
     } finally {
       setLoading(false);
     }
-  };
-
-  const onFinish = async () => {
-    setSaving(true);
-    const interview_id = uuidv4();
-
-
-    const { data, error } = await supabase
-      .from("Interviews")
-      .insert([
-        {
-          country: formData.country,
-          description: formData.description,
-          duration: formData.duration,
-          questions: questionList,
-          user_email: user?.email,
-          interview_id: interview_id,
-        },
-      ])
-      .select();
-      setSaving(false);
-
-    if (error) {
-      console.error(" Supabase insert error:", error);
-      alert("Failed to save interview. Check console for details.");
-      return;
-    }
-
-    console.log("Interview saved:", data);
-    alert("Interview saved successfully!");
   };
 
   return (
@@ -91,10 +74,13 @@ const QuestionList = ({ formData }) => {
               <QuestionListContainer questionList={questionList} />
 
               <div className="mt-6 flex justify-end">
-                <Button onClick={onFinish} disabled={saving}>
-                  {saving && <Loader2Icon className="animate-spin"/>}
-                  Finish</Button>
-
+                <button
+                  onClick={() => router.push("/previous-interviews")}
+                  className="inline-flex items-center gap-2 bg-[#0a0a0a] text-white text-sm font-medium px-5 py-2.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150"
+                >
+                  View in History
+                  <ArrowRight className="w-4 h-4" />
+                </button>
               </div>
             </>
           ) : (
