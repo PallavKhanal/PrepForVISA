@@ -15,7 +15,7 @@ const QuestionList = ({ formData }) => {
   const router = useRouter();
 
   useEffect(() => {
-    if (formData?.country && formData?.description && formData?.duration) {
+    if (formData?.description) {
       GenerateQuestionList();
     }
   }, [formData]);

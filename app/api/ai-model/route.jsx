@@ -5,9 +5,9 @@ import { NextResponse } from "next/server";
 export async function POST(request) {
   try {
     const body = await request.json();
-    const { country, description } = body;
+    const { description } = body;
 
-    if (!country || !description) {
+    if (!description) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -16,7 +16,6 @@ export async function POST(request) {
 
     // Build your final prompt from the template
     const FINAL_PROMPT = QUESTIONS_PROMPT
-      .replace("{{theTargetCountry}}", country)
       .replace("{{individualDescription}}", description);
 
     // Initialize OpenRouter / OpenAI client
