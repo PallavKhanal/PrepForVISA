@@ -41,7 +41,6 @@ const QuestionList = ({ formData }) => {
         await supabase.from("Interviews").insert([{
           country: formData.country,
           description: formData.description,
-          duration: formData.duration,
           questions: questions,
           user_email: user.email,
           interview_id: uuidv4(),

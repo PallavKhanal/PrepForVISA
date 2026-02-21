@@ -19,7 +19,7 @@ const CreateInterview = () => {
   }
 
   const GoToNext = () => {
-    if (!formData.country || !formData.description || !formData.duration) {
+    if (!formData.country || !formData.description) {
       alert('Please fill all fields before continuing!')
       return
     }

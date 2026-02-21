@@ -37,7 +37,7 @@ export const SidebarOptions = [
 export const QUESTIONS_PROMPT = `
 Act as a strict and skeptical visa officer from {{theTargetCountry}} who is not in a good mood and is very reluctant to issue any visa.
 
-You are conducting an F1 student VISA interview for {{individualDescription}}, and the interview will last approximately {{duration}}.
+You are conducting an F1 student VISA interview for {{individualDescription}}.
 
 Generate realistic, challenging, and intimidating visa interview questions that such an officer would ask to test the applicant's credibility, honesty, intentions, financial situation, academic or travel purpose, and ties to their home country.
 

@@ -31,18 +31,6 @@ const FormContainer = ({ handleInputChange, GoToNext }) => {
         />
       </div>
 
-      <div className="mt-4">
-        <h2 className="font-bold my-2">Interview Duration</h2>
-        <select
-          className="w-full border px-3 py-2 rounded-md"
-          onChange={(e) => handleInputChange('duration', e.target.value)}
-        >
-          <option value="">Select...</option>
-          <option value="2-5 Minutes">2–5 Minutes</option>
-          <option value="5-8 Minutes">5–8 Minutes</option>
-        </select>
-      </div>
-
       <div className="mt-4 flex justify-end">
         <button
           className="bg-black text-white px-4 py-2 rounded-md hover:bg-gray-800 transition-colors cursor-pointer"
