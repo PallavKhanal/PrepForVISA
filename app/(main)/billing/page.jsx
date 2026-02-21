@@ -202,23 +202,26 @@ function UsageStat({ icon: Icon, label, used, total, remaining }) {
   const isFull = pct >= 100;
 
   return (
-    <div className="rounded-xl border bg-white/70 backdrop-blur px-5 py-3.5 flex items-center gap-4">
-      <div className="w-8 h-8 rounded-lg bg-neutral-100 flex items-center justify-center shrink-0">
-        <Icon className="w-4 h-4 text-neutral-600" />
+    <div className="rounded-xl border bg-white/70 backdrop-blur px-6 py-5 flex items-center gap-5">
+      <div className="w-11 h-11 rounded-xl bg-neutral-100 flex items-center justify-center shrink-0">
+        <Icon className="w-5 h-5 text-neutral-600" />
       </div>
       <div className="flex-1 min-w-0">
-        <div className="flex items-center justify-between mb-1.5">
-          <span className="text-[12px] text-neutral-500 truncate">{label}</span>
-          <span className={`text-[12px] font-bold ml-2 shrink-0 ${isFull ? "text-red-500" : "text-[#0a0a0a]"}`}>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-sm text-neutral-500 truncate">{label}</span>
+          <span className={`text-sm font-bold ml-2 shrink-0 ${isFull ? "text-red-500" : "text-[#0a0a0a]"}`}>
             {remaining} / {total}
           </span>
         </div>
-        <div className="h-1.5 w-full rounded-full bg-neutral-100 overflow-hidden">
+        <div className="h-2 w-full rounded-full bg-neutral-100 overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ${isFull ? "bg-red-400" : "bg-[#0a0a0a]"}`}
             style={{ width: `${pct}%` }}
           />
         </div>
+        <p className={`mt-1.5 text-[12px] font-medium ${isFull ? "text-red-500" : "text-neutral-400"}`}>
+          {isFull ? "Limit reached — upgrade to continue" : `${remaining} remaining`}
+        </p>
       </div>
     </div>
   );
