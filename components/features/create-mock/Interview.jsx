@@ -2,7 +2,7 @@
 
 import PostInterviewComponent from "./PostInterviewComponent";
 import React, { useState, useEffect, useRef } from "react";
-import { Mic, MicOff, Video, VideoOff, PhoneOff } from "lucide-react";
+import { Mic, MicOff, Video, VideoOff, PhoneOff, Loader2 } from "lucide-react";
 import Image from "next/image";
 import Vapi from "@vapi-ai/web";
 
@@ -19,6 +19,7 @@ const Interview = () => {
   const [micOn, setMicOn] = useState(true);
   const [videoOn, setVideoOn] = useState(true);
   const [callActive, setCallActive] = useState(false);
+  const [connecting, setConnecting] = useState(true);
   const [aiSpeaking, setAiSpeaking] = useState(false);
   const [elapsed, setElapsed] = useState(0);
   const [showPostInterview, setShowPostInterview] = useState(false);
@@ -28,23 +29,23 @@ const Interview = () => {
   const streamRef = useRef(null);
   const timerRef = useRef(null);
   const elapsedRef = useRef(null);
-  const endingRef = useRef(false);
   const mountedRef = useRef(false);
 
+  // No endingRef guard — each op is null-checked so multiple calls are safe.
+  // The old guard was causing the End button to silently no-op when Vapi events
+  // (call-end / message keywords) fired handleEndCall before the user clicked.
   const handleEndCall = () => {
-    if (endingRef.current) return;
-    endingRef.current = true;
     try { if (vapiRef.current) { vapiRef.current.stop(); vapiRef.current = null; } } catch (_) { }
     try { if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; } } catch (_) { }
-    if (timerRef.current) clearTimeout(timerRef.current);
-    if (elapsedRef.current) clearInterval(elapsedRef.current);
+    if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+    if (elapsedRef.current) { clearInterval(elapsedRef.current); elapsedRef.current = null; }
     setCallActive(false);
+    setConnecting(false);
     setAiSpeaking(false);
     setShowPostInterview(true);
   };
 
   useEffect(() => {
-    endingRef.current = false;
     mountedRef.current = true;
 
     navigator.mediaDevices.getUserMedia({ video: true, audio: true })
@@ -73,6 +74,7 @@ const Interview = () => {
     v.start(process.env.NEXT_PUBLIC_VAPI_AGENT_ID)
       .then(() => {
         setCallActive(true);
+        setConnecting(false);
         elapsedRef.current = setInterval(() => setElapsed((s) => s + 1), 1000);
         timerRef.current = setTimeout(() => handleEndCall(), 600_000);
       })
@@ -86,8 +88,8 @@ const Interview = () => {
       document.removeEventListener("visibilitychange", onVisibility);
       try { if (vapiRef.current) { vapiRef.current.stop(); vapiRef.current = null; } } catch (_) { }
       try { if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; } } catch (_) { }
-      if (timerRef.current) clearTimeout(timerRef.current);
-      if (elapsedRef.current) clearInterval(elapsedRef.current);
+      if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
+      if (elapsedRef.current) { clearInterval(elapsedRef.current); elapsedRef.current = null; }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -163,7 +165,16 @@ const Interview = () => {
         <div className="w-72 shrink-0 flex flex-col gap-4">
 
           {/* Officer card */}
-          <div className="flex-1 rounded-xl border border-gray-100 bg-white flex flex-col items-center justify-center p-6 text-center shadow-sm">
+          <div className="flex-1 rounded-xl border border-gray-100 bg-white flex flex-col items-center justify-center p-6 text-center shadow-sm relative overflow-hidden">
+
+            {/* Connecting overlay — shown before vapi.start() resolves */}
+            {connecting && (
+              <div className="absolute inset-0 bg-white/95 flex flex-col items-center justify-center z-10 rounded-xl">
+                <Loader2 className="w-6 h-6 text-gray-400 animate-spin mb-3" />
+                <p className="text-[11px] font-semibold uppercase tracking-widest text-gray-400 mb-1">Please wait</p>
+                <p className="text-xs text-gray-400">Connecting to Officer Mitchell…</p>
+              </div>
+            )}
 
             {/* Avatar with speaking ring */}
             <div className="relative mb-4">
@@ -179,9 +190,7 @@ const Interview = () => {
 
             {/* Speaking indicator */}
             <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-semibold uppercase tracking-widest transition-all duration-300 ${aiSpeaking
-              ? "border-gray-300 bg-[#fafafa] text-gray-600"
-              : callActive
-                ? "border-gray-100 bg-white text-gray-300"
+                ? "border-gray-300 bg-[#fafafa] text-gray-600"
                 : "border-gray-100 bg-white text-gray-300"
               }`}>
               {aiSpeaking ? (
@@ -196,7 +205,7 @@ const Interview = () => {
                   <span className="ml-1">Speaking</span>
                 </>
               ) : (
-                <span>{callActive ? "Listening" : "Connecting…"}</span>
+                <span>{callActive ? "Listening" : "Ready"}</span>
               )}
             </div>
           </div>
