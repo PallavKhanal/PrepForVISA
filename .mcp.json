@@ -8,7 +8,7 @@
       }
     },
     "vapi-mcp": {
-      "command": "npx",
+      "command": "/usr/local/bin/npx",
       "args": [
         "mcp-remote",
         "https://mcp.vapi.ai/mcp",
