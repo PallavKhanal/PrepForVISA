@@ -9,14 +9,19 @@ import supabase from "@/lib/supabase";
 import { useUser } from "@/app/Provider";
 
 const APPROVED_KEYWORDS = [
-  "visa is approved", "visa is accepted", "visa has been approved", "visa has been accepted",
-  "application is approved",
+  "visa has been approved", "your visa has been approved",
+  "visa is approved", "visa is accepted", "visa has been accepted",
+  "i am satisfied with your responses",
 ];
 
 const DENIED_KEYWORDS = [
-  "visa is rejected", "visa is denied", "visa has been rejected", "visa has been denied",
-  "application is rejected", "cannot grant you", "i am unable to approve",
+  "visa application has been denied", "your visa application has been denied",
+  "visa has been denied", "visa is denied", "visa has been rejected", "visa is rejected",
+  "i am not satisfied that you meet the requirements",
+  "cannot grant you", "i am unable to approve",
 ];
+
+const END_CALL_PHRASES = ["this concludes your interview"];
 
 const formatTime = (s) =>
   `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
@@ -110,15 +115,17 @@ const Interview = () => {
         transcriptRef.current.push({ role: msg.role, text: msg.transcript });
       }
 
-      // Detect visa outcome from assistant messages
+      // Detect visa outcome and call-end trigger from assistant messages
       if (msg?.role === "assistant" && msg?.content) {
         const text = msg.content.toLowerCase();
         if (APPROVED_KEYWORDS.some((kw) => text.includes(kw))) {
           outcomeRef.current = "approved";
-          setTimeout(() => handleEndCall(), 2000);
         } else if (DENIED_KEYWORDS.some((kw) => text.includes(kw))) {
           outcomeRef.current = "denied";
-          setTimeout(() => handleEndCall(), 2000);
+        }
+        // End the call when the officer says the closing phrase
+        if (END_CALL_PHRASES.some((kw) => text.includes(kw))) {
+          setTimeout(() => handleEndCall(), 3000);
         }
       }
     });
