@@ -10,14 +10,30 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import React from "react"
-import { Plus } from "lucide-react"
+import React, { useEffect, useState } from "react"
+import { Plus, Zap, Crown, Sparkles } from "lucide-react"
 import { SidebarOptions } from "@/lib/constants"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
+import { useUser } from "@/app/Provider"
+import supabase from "@/lib/supabase"
+
+const PLAN_META = {
+  free:  { label: "Free Plan",  icon: Sparkles, tagline: "Upgrade for more interviews." },
+  pro:   { label: "Pro Plan",   icon: Zap,      tagline: "You're on the Pro plan." },
+  max:   { label: "Max Plan",   icon: Crown,    tagline: "You're on the Max plan." },
+};
 
 function AppSidebar() {
   const path = usePathname();
+  const { user } = useUser();
+  const [plan, setPlan] = useState("free");
+
+  useEffect(() => {
+    if (!user?.email) return;
+    supabase.from("Users").select("plan").eq("email", user.email).single()
+      .then(({ data }) => { if (data?.plan) setPlan(data.plan); });
+  }, [user]);
 
   return (
     <Sidebar className="border-r border-gray-100 bg-white">
@@ -67,15 +83,26 @@ function AppSidebar() {
       </SidebarContent>
 
       <SidebarFooter className="p-8 mt-auto">
-        <div className="bg-[#fafafa] rounded-xl p-6 border border-gray-100">
-          <h4 className="text-sm font-bold text-[#0a0a0a] mb-2">Go Premium</h4>
-          <p className="text-xs text-gray-500 mb-5 leading-relaxed">
-            Unlock unlimited mock interviews and advanced feedback.
-          </p>
-          <button className="w-full bg-white text-[#0a0a0a] border border-gray-200 hover:border-gray-400 text-xs font-semibold py-2.5 rounded-lg transition-all duration-150">
-            Upgrade Now
-          </button>
-        </div>
+        {(() => {
+          const meta = PLAN_META[plan] || PLAN_META.free;
+          const Icon = meta.icon;
+          const isPaid = plan === "pro" || plan === "max";
+          return (
+            <div className="bg-[#fafafa] rounded-xl p-5 border border-gray-100">
+              <div className="flex items-center gap-2 mb-1">
+                <Icon className="h-3.5 w-3.5 text-[#0a0a0a]" />
+                <h4 className="text-sm font-bold text-[#0a0a0a]">{meta.label}</h4>
+              </div>
+              <p className="text-xs text-gray-500 mb-4 leading-relaxed">{meta.tagline}</p>
+              <Link
+                href="/billing"
+                className="block w-full text-center bg-white text-[#0a0a0a] border border-gray-200 hover:border-gray-400 text-xs font-semibold py-2.5 rounded-lg transition-all duration-150"
+              >
+                {isPaid ? "Manage Plan" : "Upgrade Now"}
+              </Link>
+            </div>
+          );
+        })()}
       </SidebarFooter>
     </Sidebar>
   )
