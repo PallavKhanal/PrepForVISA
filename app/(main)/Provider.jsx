@@ -1,33 +1,30 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import AppSidebar from "@/components/layout/AppSideBar";
 import TopHeader from "@/components/layout/TopHeader";
-import supabase from "@/lib/supabase";
+import { useUser } from "@/app/Provider";
 import { useRouter } from "next/navigation";
 
 const DashboardProvider = ({ children }) => {
+  const { user } = useUser();
   const router = useRouter();
-  const [checking, setChecking] = useState(true);
 
   useEffect(() => {
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      if (!user) {
-        router.replace("/auth");
-      } else {
-        setChecking(false);
-      }
-    });
-  }, []);
+    // user === null means the auth check completed and there's no session
+    if (user === null) router.replace("/auth");
+  }, [user]);
 
-  // While checking auth, render nothing (avoids flash of dashboard for logged-out users)
-  if (checking) {
+  // user === undefined means the root Provider is still checking auth
+  if (user === undefined) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="w-5 h-5 border-2 border-border border-t-foreground rounded-full animate-spin" />
       </div>
     );
   }
+
+  if (user === null) return null;
 
   return (
     <SidebarProvider>

@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from "react";
 import { ArrowRight, Mic, Video, ShieldCheck, Lock } from "lucide-react";
 import Image from "next/image";
-import Interview from "./Interview";
+import dynamic from "next/dynamic";
+const Interview = dynamic(() => import("./Interview"), { ssr: false });
 import { useUser } from "@/app/Provider";
 import supabase from "@/lib/supabase";
 import Link from "next/link";

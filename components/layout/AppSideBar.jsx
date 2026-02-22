@@ -10,14 +10,14 @@ import {
   SidebarMenuItem,
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
-import React, { useEffect, useState } from "react"
+import React from "react"
 import Image from "next/image"
 import { Plus, Zap, Crown, Sparkles } from "lucide-react"
 import { SidebarOptions } from "@/lib/constants"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { useUser } from "@/app/Provider"
-import supabase from "@/lib/supabase"
+
 
 const PLAN_META = {
   free:  { label: "Free Plan",  icon: Sparkles, tagline: "Upgrade for more interviews." },
@@ -28,13 +28,7 @@ const PLAN_META = {
 function AppSidebar() {
   const path = usePathname();
   const { user } = useUser();
-  const [plan, setPlan] = useState("free");
-
-  useEffect(() => {
-    if (!user?.email) return;
-    supabase.from("Users").select("plan").eq("email", user.email).single()
-      .then(({ data }) => { if (data?.plan) setPlan(data.plan); });
-  }, [user]);
+  const plan = user?.plan || "free";
 
   return (
     <Sidebar className="border-r border-border bg-background">

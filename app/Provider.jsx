@@ -23,7 +23,7 @@ const Provider = ({children}) => {
 
   const createNewUser = () => {
     supabase.auth.getUser().then(async ({data: {user}}) => {
-    if (!user) return;
+    if (!user) { setUser(null); return; }
 
     let { data: Users } = await supabase
       .from('Users')
