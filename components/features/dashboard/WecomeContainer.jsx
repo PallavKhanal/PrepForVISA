@@ -2,9 +2,10 @@
 import React from 'react';
 import { useUser } from '@/app/Provider';
 
-const WelcomeContainer = ({ mockInterviews = [] }) => {
+const WelcomeContainer = ({ mockInterviews = [], loading = false }) => {
   const { user } = useUser();
 
+  const isReturning = !loading && mockInterviews.length > 0;
   const recentCount = mockInterviews.filter((m) => {
     const daysDiff = (Date.now() - new Date(m.created_at)) / (1000 * 86400);
     return daysDiff <= 7;
@@ -18,11 +19,13 @@ const WelcomeContainer = ({ mockInterviews = [] }) => {
       <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-foreground leading-snug">
-            Welcome back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}.
+            {isReturning ? 'Welcome back' : 'Welcome'}{user?.name ? `, ${user.name.split(' ')[0]}` : ''}.
           </h1>
           <p className="text-sm text-muted-foreground mt-3 leading-relaxed max-w-md">
-            {recentCount > 0
+            {isReturning && recentCount > 0
               ? <>Continue your preparation. You have <span className="font-semibold text-foreground">{recentCount} session{recentCount !== 1 ? 's' : ''}</span> this week.</>
+              : isReturning
+              ? <>Good to see you again. Start a new session whenever you&apos;re ready.</>
               : <>Start your preparation. Complete your first mock interview to track progress.</>
             }
           </p>

@@ -196,7 +196,7 @@ export default function Home() {
             <Step
               number="01"
               title="Create your profile"
-              desc="Sign in with Google and tell us about your intended major, university, and how you plan to fund your F1 studies."
+              desc="Create your account and tell us about your intended major, university, and how you plan to fund your F1 studies."
             />
             <Step
               number="02"
@@ -280,11 +280,11 @@ export default function Home() {
             />
             <FaqItem
               q="Is it free to use?"
-              a="Yes. Sign in with your Google account and you can start preparing immediately — no payment required to get started."
+              a="Yes. Create a free account and you can start preparing immediately — no payment required to get started."
             />
             <FaqItem
               q="Can I run multiple practice sessions?"
-              a="Yes. You can generate new question sets and start fresh mock interviews as many times as you need before your actual interview date."
+              a="Yes. Free plan users get 2 mock interviews and 2 question banks per month. Upgrade for more sessions."
             />
           </div>
         </div>
@@ -297,7 +297,7 @@ export default function Home() {
             Your interview is closer than it feels.
           </h2>
           <p className="text-muted-foreground mt-4 text-sm leading-relaxed">
-            Sign in with Google and generate your first personalized question set in under a minute.
+            Create your free account and generate your first personalized question set in under a minute.
           </p>
           <Link href="/auth" className="inline-block mt-8">
             <button className="inline-flex items-center gap-2 bg-foreground text-background text-sm font-medium px-8 py-3 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150 cursor-pointer">

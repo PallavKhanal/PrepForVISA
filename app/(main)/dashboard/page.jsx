@@ -44,7 +44,7 @@ const Dashboard = () => {
     <div className="w-full">
 
       {/* Page header */}
-      <WecomeContainer mockInterviews={mockInterviews} />
+      <WecomeContainer mockInterviews={mockInterviews} loading={loading} />
 
       {/* Primary actions */}
       <CreateOptions />

@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { Shield, Mail, FileText, Check, ExternalLink, Info, ArrowLeft } from "lucide-react";
+import { useUser } from "@/app/Provider";
 
 const TABS = [
   { label: "Terms of Service", icon: FileText },
@@ -11,6 +12,9 @@ const TABS = [
 
 export default function LegalPage() {
   const [active, setActive] = useState(0);
+  const { user } = useUser();
+  const backHref = user ? "/dashboard" : "/";
+  const backLabel = user ? "Back to dashboard" : "Back to home";
 
   return (
     <div className="relative min-h-screen">
@@ -24,11 +28,11 @@ export default function LegalPage() {
 
         {/* Back link */}
         <Link
-          href="/"
+          href={backHref}
           className="mb-8 inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-3.5 w-3.5" />
-          Back to home
+          {backLabel}
         </Link>
 
         {/* Page header */}
@@ -188,7 +192,7 @@ function PrivacyPage() {
       <DocSection title="2. Information We Collect">
         <CheckList
           items={[
-            { label: "Account information", detail: "Your name, email address, and profile picture provided by Google when you sign in via Google OAuth." },
+            { label: "Account information", detail: "Your name and email address provided when you create your account." },
             { label: "Interview data", detail: "The personal description you enter for question generation, the AI-generated questions, and the transcript of your mock voice interviews." },
             { label: "Usage data", detail: "Session timestamps, interview outcomes, and practice session durations used to power your dashboard." },
           ]}
@@ -212,7 +216,7 @@ function PrivacyPage() {
           <p>
             All data is stored in Supabase, hosted on AWS infrastructure in the United States.
             Your data is isolated to your account using row-level security policies. We do not
-            store your Google password — authentication is handled entirely by Google.
+            store your password in plain text — authentication is handled securely via Supabase.
           </p>
         </DocSection>
 
@@ -228,7 +232,7 @@ function PrivacyPage() {
       <DocSection title="6. Third-Party Services">
         <div className="grid gap-3 sm:grid-cols-2">
           {[
-            { name: "Google OAuth", role: "Sign-in only. We receive your name, email, and profile picture." },
+            { name: "Supabase Auth", role: "Handles account creation and sign-in. We receive your name and email address upon registration." },
             { name: "Vapi AI", role: "Processes your voice in real time during mock interviews. Audio is not stored by us." },
             { name: "OpenRouter / Mistral", role: "Generates interview questions from the description you provide." },
             { name: "Stripe", role: "Handles all payment processing. We never store your card details." },
@@ -311,7 +315,7 @@ function TermsPage() {
 
       <DocSection title="3. Account Responsibility">
         <p>
-          You are responsible for maintaining the security of your Google account used to sign in,
+          You are responsible for maintaining the security of your account credentials,
           and for all activity that occurs under your account. Notify us immediately at{" "}
           <a href="mailto:prepforvisainterview@gmail.com" className="underline font-medium">
             prepforvisainterview@gmail.com

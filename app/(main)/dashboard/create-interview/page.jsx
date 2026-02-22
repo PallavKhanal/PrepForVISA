@@ -6,7 +6,7 @@ import FormContainer from '@/components/features/create-interview/FormContainer'
 import QuestionList from '@/components/features/create-interview/QuestionList'
 
 const CreateInterview = () => {
-  const [formData, setFormData] = useState({})
+  const [formData, setFormData] = useState({ country: 'USA' })
   const [showQuestions, setShowQuestions] = useState(false)
   const router = useRouter()
   

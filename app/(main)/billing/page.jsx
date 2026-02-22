@@ -11,12 +11,12 @@ const PLANS = {
     name: "Free",
     priceLabel: "$0",
     tagline: "Try the experience",
-    mockInterviews: 1,
-    questionGenerations: 1,
+    mockInterviews: 2,
+    questionGenerations: 2,
     icon: Sparkles,
     features: [
-      "1 live mock interview",
-      "1 AI question bank",
+      "2 live mock interviews / month",
+      "2 AI question banks / month",
       "Interview history",
       "Expert advice guide",
     ],
@@ -24,14 +24,14 @@ const PLANS = {
   pro: {
     key: "pro",
     name: "Pro",
-    priceLabel: "$5",
+    comingSoon: true,
     tagline: "For serious applicants",
     mockInterviews: 7,
     questionGenerations: 5,
     icon: Zap,
     features: [
-      "7 live mock interviews",
-      "5 AI question banks",
+      "7 live mock interviews / month",
+      "5 AI question banks / month",
       "Full interview history",
       "Smart question progression",
       "Expert advice guide",
@@ -40,14 +40,14 @@ const PLANS = {
   max: {
     key: "max",
     name: "Max",
-    priceLabel: "$13",
+    comingSoon: true,
     tagline: "Daily prep until interview day",
     mockInterviews: 15,
     questionGenerations: 8,
     icon: Crown,
     features: [
-      "15 live mock interviews",
-      "8 AI question banks",
+      "15 live mock interviews / month",
+      "8 AI question banks / month",
       "Full interview history",
       "Smart question progression",
       "Expert advice guide",
@@ -231,12 +231,14 @@ function UsageStat({ icon: Icon, label, used, total, remaining }) {
 function PlanCard({ plan, isCurrent, isUpgrading, onSelect, currentPlanKey }) {
   const Icon = plan.icon;
   const isDowngrade = PLAN_ORDER[plan.key] < PLAN_ORDER[currentPlanKey];
-  const isMax = plan.key === "max";
+  const comingSoon = !!plan.comingSoon;
 
   return (
     <div className={`flex flex-col rounded-2xl border p-6 transition-all duration-200 overflow-hidden ${
       isCurrent
         ? "border-foreground bg-foreground text-background shadow-lg"
+        : comingSoon
+        ? "border-border bg-background/40 opacity-70"
         : "border-border bg-background/70 backdrop-blur hover:border-input hover:shadow-md"
     }`}>
 
@@ -252,9 +254,9 @@ function PlanCard({ plan, isCurrent, isUpgrading, onSelect, currentPlanKey }) {
             Active
           </span>
         )}
-        {isMax && !isCurrent && (
-          <span className="text-[10px] font-bold uppercase tracking-widest bg-foreground text-background px-2.5 py-1 rounded-full">
-            Popular
+        {comingSoon && (
+          <span className="text-[10px] font-bold uppercase tracking-widest bg-muted text-muted-foreground border border-border px-2.5 py-1 rounded-full">
+            Coming Soon
           </span>
         )}
       </div>
@@ -263,13 +265,15 @@ function PlanCard({ plan, isCurrent, isUpgrading, onSelect, currentPlanKey }) {
       <p className={`text-[11px] font-semibold uppercase tracking-widest mb-1 ${isCurrent ? "text-background/50" : "text-muted-foreground"}`}>
         {plan.name}
       </p>
-      <div className="flex items-end gap-1 mb-1">
-        <span className={`text-3xl font-bold leading-none ${isCurrent ? "text-background" : "text-foreground"}`}>
-          {plan.priceLabel}
-        </span>
-      </div>
+      {!comingSoon && (
+        <div className="flex items-end gap-1 mb-1">
+          <span className={`text-3xl font-bold leading-none ${isCurrent ? "text-background" : "text-foreground"}`}>
+            {plan.priceLabel}
+          </span>
+        </div>
+      )}
       <p className={`text-[12px] mb-5 ${isCurrent ? "text-background/50" : "text-muted-foreground"}`}>
-        {plan.tagline}
+        {comingSoon ? "Launching soon" : plan.tagline}
       </p>
 
       {/* Features */}
@@ -284,11 +288,13 @@ function PlanCard({ plan, isCurrent, isUpgrading, onSelect, currentPlanKey }) {
 
       {/* CTA */}
       <button
-        onClick={onSelect}
-        disabled={isCurrent || !!isUpgrading}
+        onClick={comingSoon ? undefined : onSelect}
+        disabled={isCurrent || !!isUpgrading || comingSoon}
         className={`mt-5 w-full flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold transition-all duration-150 ${
           isCurrent
             ? "bg-background/10 text-background/40 cursor-default"
+            : comingSoon
+            ? "bg-muted text-muted-foreground border border-border cursor-not-allowed"
             : isDowngrade
             ? "border border-border text-muted-foreground hover:border-input hover:text-foreground"
             : "bg-foreground text-background hover:opacity-90 active:scale-[0.98]"
@@ -298,6 +304,8 @@ function PlanCard({ plan, isCurrent, isUpgrading, onSelect, currentPlanKey }) {
           <span className="opacity-60">Updating…</span>
         ) : isCurrent ? (
           "Current plan"
+        ) : comingSoon ? (
+          "Coming soon"
         ) : isDowngrade ? (
           `Switch to ${plan.name}`
         ) : (

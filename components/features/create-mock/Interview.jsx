@@ -53,6 +53,7 @@ const Interview = () => {
   const timerRef = useRef(null);
   const elapsedRef = useRef(null);
   const mountedRef = useRef(false);
+  const stoppedRef = useRef(false);
 
   // Refs to track call data — safe in stale closures since we read .current at call-time
   const callIdRef = useRef(null);
@@ -68,6 +69,7 @@ const Interview = () => {
   }, [user]);
 
   const handleEndCall = () => {
+    stoppedRef.current = true;
     // Snapshot all data before async cleanup mutates refs
     const finalDuration = elapsedSecondsRef.current;
     const finalOutcome = outcomeRef.current;
@@ -170,6 +172,10 @@ const Interview = () => {
         variableValues: { previousTopics },
       })
         .then((call) => {
+          if (stoppedRef.current) {
+            try { v.stop(); } catch (_) {}
+            return;
+          }
           callIdRef.current = call?.id || null;
           setCallActive(true);
           setConnecting(false);
