@@ -114,10 +114,13 @@ const Interview = () => {
       })
       .catch((err) => console.warn("Camera/Mic denied:", err));
 
+    console.log("[Vapi] key defined:", !!process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY, "len:", process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY?.length);
+    console.log("[Vapi] agentId defined:", !!process.env.NEXT_PUBLIC_VAPI_AGENT_ID, "len:", process.env.NEXT_PUBLIC_VAPI_AGENT_ID?.length);
+
     const v = new Vapi(process.env.NEXT_PUBLIC_VAPI_PUBLIC_KEY);
     vapiRef.current = v;
 
-    v.on("error", (err) => console.warn("Vapi non-fatal:", err));
+    v.on("error", (err) => console.warn("Vapi error detail:", JSON.stringify(err)));
     v.on("call-end", () => handleEndCall());
     v.on("speech-start", () => setAiSpeaking(true));
     v.on("speech-end", () => setAiSpeaking(false));
