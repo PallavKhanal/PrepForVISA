@@ -11,6 +11,7 @@ import {
   SidebarMenuButton,
 } from "@/components/ui/sidebar"
 import React, { useEffect, useState } from "react"
+import Image from "next/image"
 import { Plus, Zap, Crown, Sparkles } from "lucide-react"
 import { SidebarOptions } from "@/lib/constants"
 import Link from "next/link"
@@ -39,8 +40,9 @@ function AppSidebar() {
     <Sidebar className="border-r border-border bg-background">
       <SidebarHeader className="flex flex-col gap-8 p-8 pb-4">
         <div className="w-full">
-          <Link href="/dashboard" className="inline-block text-xl font-bold tracking-tight select-none text-foreground hover:opacity-80 transition-opacity">
-            PrepForVISA
+          <Link href="/dashboard" className="inline-flex items-center gap-2.5 select-none hover:opacity-80 transition-opacity">
+            <Image src="/logo.svg" alt="PrepForVISA" width={28} height={28} />
+            <span className="text-xl font-bold tracking-tight text-foreground">PrepForVISA</span>
           </Link>
         </div>
         <button className="w-full flex items-center justify-center bg-foreground text-background text-sm font-medium px-4 py-3.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150 cursor-pointer">

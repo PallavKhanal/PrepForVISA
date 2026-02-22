@@ -25,7 +25,7 @@ export default function DonateUsPage() {
       <header className="border-b border-border">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <Image src="/Logo.png" alt="Logo" width={42} height={42} />
+            <Image src="/logo.svg" alt="PrepForVISA" width={32} height={32} />
             <span className="text-xl font-semibold tracking-tight">VISAPrep</span>
           </div>
           <Button
