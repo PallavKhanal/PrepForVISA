@@ -16,6 +16,7 @@ import {
   Plus,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import FeedbackCard from "@/components/features/create-mock/FeedbackCard";
 
 /* ─── helpers ─────────────────────────────────────────────── */
 
@@ -115,9 +116,9 @@ const MockInterviewCard = ({ item }) => {
         </div>
       </button>
 
-      {/* Expanded transcript */}
+      {/* Expanded transcript + feedback */}
       {open && (
-        <div className="border-t border-border bg-muted px-6 py-5">
+        <div className="border-t border-border bg-muted px-6 py-5 space-y-4">
           {transcript.length === 0 ? (
             <p className="text-sm text-muted-foreground text-center py-4">
               No transcript recorded for this session.
@@ -154,6 +155,16 @@ const MockInterviewCard = ({ item }) => {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* Feedback */}
+          {item.feedback ? (
+            <FeedbackCard feedback={item.feedback} />
+          ) : (
+            <div className="rounded-xl border border-border bg-background px-5 py-4">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">AI Feedback</p>
+              <p className="text-sm text-muted-foreground">No feedback available for this session.</p>
             </div>
           )}
         </div>

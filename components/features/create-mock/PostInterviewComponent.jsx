@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { ArrowRight, CheckCircle2, XCircle, Clock } from "lucide-react";
+import FeedbackCard, { FeedbackSkeleton } from "./FeedbackCard";
 
 const formatDuration = (seconds) => {
   if (!seconds) return null;
@@ -10,7 +11,7 @@ const formatDuration = (seconds) => {
   return m > 0 ? `${m}m ${s}s` : `${s}s`;
 };
 
-const PostInterviewComponent = ({ outcome = "unknown", durationSeconds = 0 }) => {
+const PostInterviewComponent = ({ outcome = "unknown", durationSeconds = 0, feedback = null, feedbackLoading = false }) => {
   const router = useRouter();
 
   const isApproved = outcome === "approved";
@@ -18,8 +19,8 @@ const PostInterviewComponent = ({ outcome = "unknown", durationSeconds = 0 }) =>
   const duration = formatDuration(durationSeconds);
 
   return (
-    <div className="flex items-center justify-center h-full w-full bg-background">
-      <div className="w-full max-w-md mx-4">
+    <div className="flex items-start justify-center min-h-full py-10 px-4 w-full bg-background overflow-y-auto">
+      <div className="w-full max-w-lg mx-4">
 
         <div className="rounded-xl border border-border bg-background shadow-sm overflow-hidden">
 
@@ -60,7 +61,7 @@ const PostInterviewComponent = ({ outcome = "unknown", durationSeconds = 0 }) =>
             )}
 
             <p className="text-sm text-muted-foreground leading-relaxed mb-8 max-w-xs mx-auto">
-              Your mock F-1 visa interview has ended. Review your session history on the dashboard.
+              Your mock F-1 visa interview has ended. AI feedback is loading below — review your full session history on the dashboard.
             </p>
 
             <button
@@ -72,6 +73,16 @@ const PostInterviewComponent = ({ outcome = "unknown", durationSeconds = 0 }) =>
             </button>
           </div>
         </div>
+
+        {/* Feedback section */}
+        {feedbackLoading && <FeedbackSkeleton />}
+        {!feedbackLoading && feedback && <FeedbackCard feedback={feedback} className="mt-6" />}
+        {!feedbackLoading && !feedback && (
+          <p className="text-center text-xs text-muted-foreground mt-6">
+            Feedback could not be generated for this session.
+          </p>
+        )}
+
       </div>
     </div>
   );

@@ -46,6 +46,8 @@ const Interview = () => {
   const [elapsed, setElapsed] = useState(0);
   const [showPostInterview, setShowPostInterview] = useState(false);
   const [interviewOutcome, setInterviewOutcome] = useState("unknown");
+  const [feedbackData, setFeedbackData] = useState(null);
+  const [feedbackLoading, setFeedbackLoading] = useState(false);
 
   const vapiRef = useRef(null);
   const videoRef = useRef(null);
@@ -68,7 +70,8 @@ const Interview = () => {
     userEmailRef.current = user?.email || null;
   }, [user]);
 
-  const handleEndCall = () => {
+  const handleEndCall = async () => {
+    if (stoppedRef.current) return;
     stoppedRef.current = true;
     // Snapshot all data before async cleanup mutates refs
     const finalDuration = elapsedSecondsRef.current;
@@ -77,31 +80,70 @@ const Interview = () => {
     const finalCallId = callIdRef.current;
     const email = userEmailRef.current;
 
-    // Persist to Supabase exactly once
-    if (!savedRef.current && email) {
-      savedRef.current = true;
-      supabase
-        .from("MockInterviews")
-        .insert([{
-          call_id: finalCallId,
-          user_email: email,
-          duration_seconds: finalDuration,
-          outcome: finalOutcome,
-          transcript: finalTranscript,
-        }])
-        .then(() => {})
-        .catch((e) => console.warn("Failed to save interview:", e));
-    }
-
+    // Stop media/timers synchronously
     try { if (vapiRef.current) { vapiRef.current.stop(); vapiRef.current = null; } } catch (_) { }
     try { if (streamRef.current) { streamRef.current.getTracks().forEach((t) => t.stop()); streamRef.current = null; } } catch (_) { }
     if (timerRef.current) { clearTimeout(timerRef.current); timerRef.current = null; }
     if (elapsedRef.current) { clearInterval(elapsedRef.current); elapsedRef.current = null; }
+
+    // Show post-interview UI immediately
     setCallActive(false);
     setConnecting(false);
     setAiSpeaking(false);
     setInterviewOutcome(finalOutcome);
+    setFeedbackLoading(true);
     setShowPostInterview(true);
+
+    // Persist to Supabase and generate feedback
+    if (!savedRef.current && email) {
+      savedRef.current = true;
+      try {
+        // Insert interview row and get its ID
+        const { data: inserted } = await supabase
+          .from("MockInterviews")
+          .insert([{
+            call_id: finalCallId,
+            user_email: email,
+            duration_seconds: finalDuration,
+            outcome: finalOutcome,
+            transcript: finalTranscript,
+          }])
+          .select("id")
+          .single();
+
+        // Only generate feedback if there's a transcript to analyze
+        if (finalTranscript.length > 0) {
+          const { data: { session } } = await supabase.auth.getSession();
+          const token = session?.access_token;
+          if (token) {
+            const res = await fetch("/api/generate-feedback", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+              body: JSON.stringify({ transcript: finalTranscript, outcome: finalOutcome }),
+            });
+            if (res.ok) {
+              const { feedback } = await res.json();
+              if (feedback && inserted?.id) {
+                await supabase
+                  .from("MockInterviews")
+                  .update({ feedback })
+                  .eq("id", inserted.id);
+              }
+              setFeedbackData(feedback || null);
+            }
+          }
+        }
+      } catch (e) {
+        console.warn("Failed to save/generate feedback:", e);
+      } finally {
+        setFeedbackLoading(false);
+      }
+    } else {
+      setFeedbackLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -226,6 +268,8 @@ const Interview = () => {
     <PostInterviewComponent
       outcome={interviewOutcome}
       durationSeconds={elapsedSecondsRef.current}
+      feedback={feedbackData}
+      feedbackLoading={feedbackLoading}
     />
   );
 
