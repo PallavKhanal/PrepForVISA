@@ -183,13 +183,6 @@ export default function BillingPage() {
           ))}
         </div>
 
-        {/* Beta note */}
-        <div className="shrink-0 rounded-xl border border-dashed border-border bg-background/50 px-4 py-3 flex items-center gap-3 backdrop-blur">
-          <div className="w-2 h-2 rounded-full bg-amber-400 shrink-0" />
-          <p className="text-[12px] text-muted-foreground">
-            Payments are coming soon. Plan upgrades are free during the beta period — enjoy full access while it lasts.
-          </p>
-        </div>
 
       </div>
     </div>

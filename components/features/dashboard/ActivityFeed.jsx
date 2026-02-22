@@ -1,6 +1,7 @@
 "use client";
 import React from "react";
 import { Mic, FileText, CheckCircle2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const timeAgo = (dateStr) => {
   if (!dateStr) return "";
@@ -13,6 +14,7 @@ const timeAgo = (dateStr) => {
 };
 
 const ActivityFeed = ({ mockInterviews = [], interviews = [] }) => {
+  const router = useRouter();
   const activities = [
     ...mockInterviews.map((m) => ({
       id: m.id,
@@ -85,7 +87,10 @@ const ActivityFeed = ({ mockInterviews = [], interviews = [] }) => {
         )}
       </div>
 
-      <button className="mt-8 w-full py-2.5 text-sm font-medium text-muted-foreground border border-border hover:border-input hover:text-foreground bg-background rounded-lg transition-all duration-150">
+      <button
+        onClick={() => router.push("/previous-interviews")}
+        className="mt-8 w-full py-2.5 text-sm font-medium text-muted-foreground border border-border hover:border-input hover:text-foreground bg-background rounded-lg transition-all duration-150"
+      >
         View all activity
       </button>
     </div>

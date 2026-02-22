@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import supabase from "@/lib/supabase";
 import {
   User, Mail, Download, Shield,
-  LogOut, Trash2, Check, AlertTriangle, Sun, Moon, Monitor, Eye, EyeOff,
+  LogOut, Trash2, Check, AlertTriangle, Sun, Moon, Monitor, Eye, EyeOff, Camera, Loader2,
 } from "lucide-react";
 
 /* ── Toggle component ── */
@@ -81,6 +81,9 @@ export default function SettingsPage() {
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
+  /* Avatar upload */
+  const [avatarUploading, setAvatarUploading] = useState(false);
+
   /* Export */
   const [exporting, setExporting] = useState(false);
 
@@ -138,6 +141,25 @@ export default function SettingsPage() {
   const handleMicToggle = (val) => {
     setMicDefault(val);
     savePrefs(cameraDefault, val);
+  };
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file || !user?.email) return;
+    const ext = file.name.split(".").pop();
+    const path = `${user.email}/avatar.${ext}`;
+    setAvatarUploading(true);
+    try {
+      const { error: uploadError } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+      if (uploadError) throw uploadError;
+      const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
+      await supabase.from("Users").update({ picture: publicUrl }).eq("email", user.email);
+      setUser((prev) => ({ ...prev, picture: publicUrl }));
+    } catch (err) {
+      console.warn("Avatar upload failed:", err);
+    } finally {
+      setAvatarUploading(false);
+    }
   };
 
   const handleSaveName = async () => {
@@ -207,19 +229,30 @@ export default function SettingsPage() {
         {/* ── PROFILE ── */}
         <Section title="Profile" description="Your public identity on PrepForVISA.">
           <div className="px-6 py-5 flex items-center gap-4">
-            <div className="relative w-14 h-14 rounded-full overflow-hidden border border-border shrink-0">
-              {user?.picture ? (
+            <label className="relative w-14 h-14 rounded-full overflow-hidden border border-border shrink-0 cursor-pointer group">
+              {avatarUploading ? (
+                <div className="w-full h-full bg-muted flex items-center justify-center">
+                  <Loader2 className="w-5 h-5 text-muted-foreground animate-spin" />
+                </div>
+              ) : user?.picture ? (
                 <Image src={user.picture} alt="Avatar" fill className="object-cover" />
               ) : (
                 <div className="w-full h-full bg-muted flex items-center justify-center">
                   <User className="w-6 h-6 text-muted-foreground" />
                 </div>
               )}
-            </div>
+              {/* Camera overlay on hover */}
+              {!avatarUploading && (
+                <div className="absolute inset-0 bg-foreground/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-150 rounded-full">
+                  <Camera className="w-4 h-4 text-background" />
+                </div>
+              )}
+              <input type="file" accept="image/*" className="hidden" onChange={handleAvatarUpload} />
+            </label>
             <div>
               <p className="text-[14px] font-medium text-foreground">{user?.name || "—"}</p>
               <p className="text-[12px] text-muted-foreground">{user?.email}</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Signed in via email</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Click photo to change · Signed in via email</p>
             </div>
           </div>
 

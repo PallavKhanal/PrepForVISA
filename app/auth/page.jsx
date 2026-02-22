@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import supabase from "@/lib/supabase";
-import { Eye, EyeOff, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { Eye, EyeOff, CheckCircle2, AlertCircle, Loader2, Camera } from "lucide-react";
 
 /* ── Password strength ── */
 function getStrength(pwd) {
@@ -52,7 +52,7 @@ function StrengthBar({ password }) {
 
 export default function AuthPage() {
   const router = useRouter();
-  const [mode, setMode] = useState("signin");
+  const [mode, setMode] = useState("signup");
 
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
@@ -60,6 +60,9 @@ export default function AuthPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
+
+  const [avatarFile, setAvatarFile] = useState(null);
+  const [avatarPreview, setAvatarPreview] = useState(null);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -74,6 +77,29 @@ export default function AuthPage() {
   const reset = () => {
     setFullName(""); setEmail(""); setPassword(""); setConfirmPassword("");
     setError(""); setEmailSent(false); setShowPassword(false); setShowConfirm(false);
+    setAvatarFile(null); setAvatarPreview(null);
+  };
+
+  const handleAvatarPick = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setAvatarFile(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setAvatarPreview(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const uploadAvatarAfterSignup = async (userEmail, file) => {
+    try {
+      const ext = file.name.split(".").pop();
+      const path = `${userEmail}/avatar.${ext}`;
+      const { error: uploadErr } = await supabase.storage.from("avatars").upload(path, file, { upsert: true });
+      if (uploadErr) return;
+      const { data: { publicUrl } } = supabase.storage.from("avatars").getPublicUrl(path);
+      await supabase.from("Users").update({ picture: publicUrl }).eq("email", userEmail);
+    } catch (_) {
+      // Silent — user can update from Settings
+    }
   };
 
   const switchMode = (m) => { setMode(m); reset(); };
@@ -92,9 +118,13 @@ export default function AuthPage() {
         email, password,
         options: { data: { name: fullName.trim() } },
       });
-      if (err) setError(err.message);
-      else if (data.session) router.replace("/dashboard");
-      else setEmailSent(true);
+      if (err) {
+        setError(err.message);
+      } else {
+        if (avatarFile) await uploadAvatarAfterSignup(email, avatarFile);
+        if (data.session) router.replace("/dashboard");
+        else setEmailSent(true);
+      }
     } else {
       const { error: err } = await supabase.auth.signInWithPassword({ email, password });
       if (err) setError(err.message === "Invalid login credentials"
@@ -210,6 +240,28 @@ export default function AuthPage() {
               </p>
 
               <form onSubmit={handleSubmit} className="space-y-4">
+
+                {/* Optional avatar picker (signup only) */}
+                {mode === "signup" && (
+                  <div className="flex flex-col items-center gap-1.5 pb-2">
+                    <label className="relative w-16 h-16 rounded-full border-2 border-dashed border-zinc-300 dark:border-zinc-600 cursor-pointer overflow-hidden group hover:border-zinc-400 dark:hover:border-zinc-500 transition-colors">
+                      {avatarPreview ? (
+                        <Image src={avatarPreview} alt="Preview" fill className="object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-800">
+                          <Camera className="w-5 h-5 text-zinc-400" />
+                        </div>
+                      )}
+                      {avatarPreview && (
+                        <div className="absolute inset-0 bg-black/30 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                          <Camera className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                      <input type="file" accept="image/*" className="hidden" onChange={handleAvatarPick} />
+                    </label>
+                    <span className="text-[11px] text-muted-foreground/60">Profile photo (optional)</span>
+                  </div>
+                )}
 
                 {mode === "signup" && (
                   <div className="space-y-1.5">

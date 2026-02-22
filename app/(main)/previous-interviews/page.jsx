@@ -14,8 +14,9 @@ import {
   Minus,
   Video,
   Plus,
+  X,
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import FeedbackCard from "@/components/features/create-mock/FeedbackCard";
 
 /* ─── helpers ─────────────────────────────────────────────── */
@@ -245,10 +246,18 @@ const TABS = ["All", "Mock Interviews", "Question Banks"];
 export default function PreviousInterviews() {
   const { user } = useUser();
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mockInterviews, setMockInterviews] = useState([]);
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState("All");
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Read search query from URL param
+  useEffect(() => {
+    const q = searchParams.get("q") || "";
+    setSearchQuery(q);
+  }, [searchParams]);
 
   useEffect(() => {
     if (!user?.email) return;
@@ -280,12 +289,23 @@ export default function PreviousInterviews() {
     ...interviews.map((i) => ({ ...i, _type: "questions" })),
   ].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
 
-  const visibleSessions =
+  const tabFiltered =
     activeTab === "Mock Interviews"
       ? allSessions.filter((s) => s._type === "mock")
       : activeTab === "Question Banks"
       ? allSessions.filter((s) => s._type === "questions")
       : allSessions;
+
+  const visibleSessions = searchQuery
+    ? tabFiltered.filter((s) => {
+        const q = searchQuery.toLowerCase();
+        const dateStr = s.created_at ? new Date(s.created_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }).toLowerCase() : "";
+        if (s._type === "mock") {
+          return (s.outcome || "").toLowerCase().includes(q) || dateStr.includes(q);
+        }
+        return (s.country || "").toLowerCase().includes(q) || (s.description || "").toLowerCase().includes(q) || dateStr.includes(q);
+      })
+    : tabFiltered;
 
   const isEmpty = !loading && visibleSessions.length === 0;
 
@@ -320,6 +340,22 @@ export default function PreviousInterviews() {
           </div>
         </div>
       </div>
+
+      {/* Search results banner */}
+      {searchQuery && (
+        <div className="flex items-center gap-3 mb-6 px-4 py-2.5 rounded-lg bg-muted border border-border text-sm">
+          <span className="text-muted-foreground flex-1">
+            Showing results for <span className="font-semibold text-foreground">"{searchQuery}"</span>
+            {" "}— {visibleSessions.length} result{visibleSessions.length !== 1 ? "s" : ""}
+          </span>
+          <button
+            onClick={() => router.push("/previous-interviews")}
+            className="flex items-center gap-1 text-muted-foreground hover:text-foreground transition-colors text-xs font-medium"
+          >
+            <X className="w-3.5 h-3.5" /> Clear
+          </button>
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex items-center gap-1 mb-8 border-b border-border pb-0">
