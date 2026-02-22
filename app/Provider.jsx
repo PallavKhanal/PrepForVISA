@@ -19,6 +19,16 @@ const Provider = ({children}) => {
 
     useEffect(() => {
         createNewUser();
+
+        const { data: { subscription } } = supabase.auth.onAuthStateChange((event) => {
+            if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+                createNewUser();
+            } else if (event === 'SIGNED_OUT') {
+                setUser(null);
+            }
+        });
+
+        return () => subscription.unsubscribe();
     }, []);
 
   const createNewUser = () => {
