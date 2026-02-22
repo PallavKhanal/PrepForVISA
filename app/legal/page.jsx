@@ -4,9 +4,9 @@ import Link from "next/link";
 import { Shield, Mail, FileText, Check, ExternalLink, Info, ArrowLeft } from "lucide-react";
 
 const TABS = [
-  { label: "Contact Us", icon: Mail },
-  { label: "Privacy Policy", icon: Shield },
   { label: "Terms of Service", icon: FileText },
+  { label: "Privacy Policy", icon: Shield },
+  { label: "Contact Us", icon: Mail },
 ];
 
 export default function LegalPage() {
@@ -62,9 +62,9 @@ export default function LegalPage() {
         </div>
 
         {/* Tab content */}
-        {active === 0 && <ContactPage />}
+        {active === 0 && <TermsPage />}
         {active === 1 && <PrivacyPage />}
-        {active === 2 && <TermsPage />}
+        {active === 2 && <ContactPage />}
 
       </div>
     </div>

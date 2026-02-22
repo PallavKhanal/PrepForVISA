@@ -9,7 +9,7 @@ import { useTheme } from "next-themes";
 import supabase from "@/lib/supabase";
 import {
   User, Mail, Download, Shield,
-  LogOut, Trash2, Check, AlertTriangle, Sun, Moon, Monitor,
+  LogOut, Trash2, Check, AlertTriangle, Sun, Moon, Monitor, Eye, EyeOff,
 } from "lucide-react";
 
 /* ── Toggle component ── */
@@ -84,6 +84,14 @@ export default function SettingsPage() {
   /* Export */
   const [exporting, setExporting] = useState(false);
 
+  /* Change password */
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmNewPassword, setConfirmNewPassword] = useState("");
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [passwordSaving, setPasswordSaving] = useState(false);
+  const [passwordSaved, setPasswordSaved] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
+
   useEffect(() => {
     if (user?.name) setDisplayName(user.name);
     const prefs = localStorage.getItem("interviewPrefs");
@@ -93,6 +101,23 @@ export default function SettingsPage() {
       setMicDefault(parsed.mic ?? true);
     }
   }, [user]);
+
+  const handleChangePassword = async () => {
+    setPasswordError("");
+    if (newPassword.length < 8) return setPasswordError("Password must be at least 8 characters.");
+    if (newPassword !== confirmNewPassword) return setPasswordError("Passwords do not match.");
+    setPasswordSaving(true);
+    const { error } = await supabase.auth.updateUser({ password: newPassword });
+    setPasswordSaving(false);
+    if (error) {
+      setPasswordError(error.message);
+    } else {
+      setPasswordSaved(true);
+      setNewPassword("");
+      setConfirmNewPassword("");
+      setTimeout(() => setPasswordSaved(false), 2500);
+    }
+  };
 
   const handleThemeChange = async (value) => {
     setTheme(value);
@@ -194,7 +219,7 @@ export default function SettingsPage() {
             <div>
               <p className="text-[14px] font-medium text-foreground">{user?.name || "—"}</p>
               <p className="text-[12px] text-muted-foreground">{user?.email}</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Signed in via Google</p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Signed in via email</p>
             </div>
           </div>
 
@@ -217,12 +242,69 @@ export default function SettingsPage() {
             </div>
           </Row>
 
-          <Row label="Email address" hint="Managed by Google — cannot be changed here.">
+          <Row label="Email address" hint="Your login email — cannot be changed here.">
             <div className="flex items-center gap-2 text-[13px] text-muted-foreground bg-muted border border-border rounded-lg px-3 py-1.5">
               <Mail className="w-3.5 h-3.5" />
               {user?.email}
             </div>
           </Row>
+        </Section>
+
+        {/* ── SECURITY ── */}
+        <Section title="Security" description="Set or update the password for your account.">
+          <div className="px-6 py-5 space-y-4">
+            <div>
+              <label className="text-[12px] font-semibold text-foreground/70 uppercase tracking-wide mb-1.5 block">
+                New password
+              </label>
+              <div className="relative">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  placeholder="Min. 8 characters"
+                  className="w-full border border-border rounded-lg pl-3.5 pr-10 py-2 text-[13.5px] bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-input transition-colors"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword((v) => !v)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                  tabIndex={-1}
+                >
+                  {showNewPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
+            </div>
+            <div>
+              <label className="text-[12px] font-semibold text-foreground/70 uppercase tracking-wide mb-1.5 block">
+                Confirm new password
+              </label>
+              <input
+                type="password"
+                value={confirmNewPassword}
+                onChange={(e) => setConfirmNewPassword(e.target.value)}
+                placeholder="Re-enter new password"
+                className="w-full border border-border rounded-lg px-3.5 py-2 text-[13.5px] bg-background text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-input transition-colors"
+              />
+            </div>
+            {passwordError && (
+              <p className="text-[12px] text-red-500">{passwordError}</p>
+            )}
+            <div className="flex items-center justify-between pt-1">
+              {passwordSaved && (
+                <span className="text-[12px] text-foreground/60 flex items-center gap-1.5">
+                  <Check className="w-3.5 h-3.5" /> Password updated
+                </span>
+              )}
+              <button
+                onClick={handleChangePassword}
+                disabled={passwordSaving || !newPassword || !confirmNewPassword}
+                className="ml-auto flex items-center gap-1.5 px-4 py-2 rounded-lg bg-foreground text-background text-[12px] font-medium hover:opacity-90 disabled:opacity-40 transition-all"
+              >
+                {passwordSaving ? "Saving…" : "Update password"}
+              </button>
+            </div>
+          </div>
         </Section>
 
         {/* ── APPEARANCE ── */}

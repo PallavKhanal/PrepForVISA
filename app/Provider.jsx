@@ -23,21 +23,23 @@ const Provider = ({children}) => {
 
   const createNewUser = () => {
     supabase.auth.getUser().then(async ({data: {user}}) => {
-    let { data: Users, error } = await supabase
-    .from('Users')
-    .select("*")
-    .eq('email', user?.email);
+    if (!user) return;
 
-    if(Users.length == 0){
-        const { data, error } = await supabase.from('Users').insert([
-            {
-                email: user?.email,
-                name: user?.user_metadata.name,
-                picture: user?.user_metadata.picture
-            }
-        ]).select();
-         setUser(data?.[0]);
-        return;
+    let { data: Users } = await supabase
+      .from('Users')
+      .select("*")
+      .eq('email', user.email);
+
+    if (Users.length === 0) {
+      const { data } = await supabase.from('Users').insert([
+        {
+          email: user.email,
+          name: user.user_metadata?.name || user.email.split('@')[0],
+          picture: user.user_metadata?.picture || null,
+        }
+      ]).select();
+      setUser(data?.[0]);
+      return;
     }
     setUser(Users[0]);
     });
