@@ -24,8 +24,7 @@ const CreateInterview = () => {
       return
     }
 
-    console.log('Final Form Data:', formData)
-    setShowQuestions(true) 
+    setShowQuestions(true)
   }
 
   return (

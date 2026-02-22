@@ -23,7 +23,10 @@ const QuestionList = ({ formData }) => {
   const GenerateQuestionList = async () => {
     setLoading(true);
     try {
-      const result = await axios.post("/api/ai-model", { ...formData });
+      const { data: { session } } = await supabase.auth.getSession();
+      const result = await axios.post("/api/ai-model", { ...formData }, {
+        headers: { Authorization: `Bearer ${session?.access_token}` },
+      });
 
       let parsedData;
       try {
