@@ -5,6 +5,7 @@ import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Bell, Search, ChevronRight, Sun, Moon } from "lucide-react";
 import { useUser } from "@/app/Provider";
 import Image from "next/image";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 
 const TopHeader = () => {
@@ -52,7 +53,7 @@ const TopHeader = () => {
                 </button>
 
                 {/* User Avatar */}
-                <div className="flex items-center gap-4 pl-8 border-l border-border cursor-pointer group">
+                <Link href="/settings" className="flex items-center gap-4 pl-8 border-l border-border cursor-pointer group">
                     <div className="hidden md:flex flex-col text-right">
                         <span className="text-sm font-semibold text-foreground leading-none mb-1 group-hover:text-muted-foreground transition-colors">
                             {user?.name || "User"}
@@ -70,7 +71,7 @@ const TopHeader = () => {
                             </div>
                         )}
                     </div>
-                </div>
+                </Link>
             </div>
         </header>
     );
