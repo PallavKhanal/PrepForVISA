@@ -39,10 +39,10 @@ function AppSidebar() {
             <span className="text-xl font-bold tracking-tight text-foreground">PrepForVISA</span>
           </Link>
         </div>
-        <button className="w-full flex items-center justify-center bg-foreground text-background text-sm font-medium px-4 py-3.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150 cursor-pointer">
+        <Link href="/dashboard/create-interview" className="w-full flex items-center justify-center bg-foreground text-background text-sm font-medium px-4 py-3.5 rounded-lg shadow-sm hover:shadow-md hover:-translate-y-px active:translate-y-0 transition-all duration-150 cursor-pointer">
           <Plus className="mr-2 h-4 w-4" />
           <span>New Interview</span>
-        </button>
+        </Link>
       </SidebarHeader>
 
       <SidebarContent className="px-5 pt-8">
