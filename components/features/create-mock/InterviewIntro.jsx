@@ -8,7 +8,7 @@ import { useUser } from "@/app/Provider";
 import supabase from "@/lib/supabase";
 import Link from "next/link";
 
-const PLAN_LIMITS = { free: 2, pro: 7, max: 15 };
+const PLAN_LIMITS = { free: 2, pro: 7, max: Infinity };
 
 const InterviewIntro = () => {
   const [start, setStart] = useState(false);
