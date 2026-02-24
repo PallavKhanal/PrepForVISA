@@ -3,7 +3,6 @@
 import PostInterviewComponent from "./PostInterviewComponent";
 import React, { useState, useEffect, useRef } from "react";
 import { Mic, MicOff, Video, VideoOff, PhoneOff, Loader2 } from "lucide-react";
-import Image from "next/image";
 import Vapi from "@vapi-ai/web";
 import supabase from "@/lib/supabase";
 import { useUser } from "@/app/Provider";
@@ -26,8 +25,13 @@ const END_CALL_PHRASES = ["this concludes your interview"];
 const formatTime = (s) =>
   `${String(Math.floor(s / 60)).padStart(2, "0")}:${String(s % 60).padStart(2, "0")}`;
 
-const Interview = () => {
+const Interview = ({ officer }) => {
   const { user } = useUser();
+
+  const agentId = officer?.vapiId || process.env.NEXT_PUBLIC_VAPI_AGENT_ID;
+  const officerName = officer?.name || "Officer Mitchell";
+  const officerImage = officer?.image || "/officers/michelle.jpg";
+  const officerDivision = officer?.unit || "Nonimmigrant Visa Unit";
 
   // Read camera/mic defaults saved in Settings
   const getPrefs = () => {
@@ -210,7 +214,7 @@ const Interview = () => {
         }
       }
 
-      v.start(process.env.NEXT_PUBLIC_VAPI_AGENT_ID, {
+      v.start(agentId, {
         variableValues: { previousTopics },
       })
         .then((call) => {
@@ -291,7 +295,7 @@ const Interview = () => {
         <div className="flex items-center gap-4">
           <span className="font-mono text-sm text-muted-foreground tabular-nums">{formatTime(elapsed)}</span>
           <div className="h-3.5 w-px bg-border" />
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">F-1 Visa · Mock Interview</span>
+          <span className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">F-1 Visa · {officerName}</span>
         </div>
       </div>
 
@@ -333,7 +337,7 @@ const Interview = () => {
               <div className="absolute inset-0 bg-background/95 flex flex-col items-center justify-center z-10 rounded-xl">
                 <Loader2 className="w-6 h-6 text-muted-foreground animate-spin mb-3" />
                 <p className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">Please wait</p>
-                <p className="text-xs text-muted-foreground">Connecting to Officer Mitchell…</p>
+                <p className="text-xs text-muted-foreground">Connecting to {officerName}…</p>
               </div>
             )}
 
@@ -341,13 +345,13 @@ const Interview = () => {
             <div className="relative mb-4">
               <div className={`absolute -inset-1.5 rounded-full border-2 transition-all duration-500 ${aiSpeaking ? "border-border opacity-100" : "border-transparent opacity-0"}`} />
               <div className="relative w-24 h-24 rounded-full overflow-hidden border border-border shadow-sm">
-                <Image src="/visa-officer.png" alt="Visa Officer" fill className="object-cover" />
+                <img src={officerImage} alt={officerName} className="w-full h-full object-cover object-top" />
               </div>
             </div>
 
             <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground mb-1">Consular Officer</p>
-            <h3 className="text-base font-semibold text-foreground mb-0.5">Officer Mitchell</h3>
-            <p className="text-xs text-muted-foreground mb-4">U.S. Consulate · F-1 Division</p>
+            <h3 className="text-base font-semibold text-foreground mb-0.5">{officerName}</h3>
+            <p className="text-xs text-muted-foreground mb-4">U.S. Consulate · {officerDivision}</p>
 
             {/* Speaking indicator */}
             <div className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-[10px] font-semibold uppercase tracking-widest transition-all duration-300 ${aiSpeaking
